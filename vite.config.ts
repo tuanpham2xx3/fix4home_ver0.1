@@ -4,22 +4,40 @@ import path from "path";
 import { createServer } from "./server";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-  },
-  build: {
-    outDir: "dist/spa",
-  },
-  plugins: [react(), expressPlugin()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./client"),
-      "@shared": path.resolve(__dirname, "./shared"),
+export default defineConfig(({ mode }) => {
+  const isProduction = mode === 'production';
+  // Lấy tên repository từ environment variable hoặc sử dụng tên mặc định
+  const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1] || 'fix4home_ver0.1';
+  const base = isProduction ? `/${repoName}/` : '/';
+
+  return {
+    base,
+    server: {
+      host: "::",
+      port: 8080,
     },
-  },
-}));
+    build: {
+      outDir: "dist",
+      assetsDir: "assets",
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu']
+          }
+        }
+      }
+    },
+    plugins: [react(), expressPlugin()],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./client"),
+        "@shared": path.resolve(__dirname, "./shared"),
+      },
+    },
+  };
+});
 
 function expressPlugin(): Plugin {
   return {
