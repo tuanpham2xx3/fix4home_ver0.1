@@ -536,14 +536,21 @@ export default function Services() {
                             {formatPrice(service.price)}đ
                           </div>
                         </div>
-                        <Button
-                          asChild
-                          className="group-hover:bg-primary group-hover:text-primary-foreground"
-                        >
-                          <Link to={`/services/${service.id}`}>
-                            View Details
-                          </Link>
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button asChild variant="outline" className="flex-1">
+                            <Link to={`/services/${service.id}`}>
+                              View Details
+                            </Link>
+                          </Button>
+                          <Button
+                            asChild
+                            className="flex-1 group-hover:bg-primary group-hover:text-primary-foreground"
+                          >
+                            <Link to={`/booking/service/${service.id}`}>
+                              Book Now
+                            </Link>
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
