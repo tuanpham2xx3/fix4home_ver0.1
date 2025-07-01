@@ -29,6 +29,11 @@ import CustomerOrderDetail from "./pages/customer/OrderDetail";
 import CustomerProfile from "./pages/customer/Profile";
 import CustomerReviews from "./pages/customer/Reviews";
 
+// Booking Pages
+import BookService from "./pages/booking/BookService";
+import TechnicianSelection from "./pages/booking/TechnicianSelection";
+import ConfirmBooking from "./pages/booking/ConfirmBooking";
+
 // Technician Pages
 import TechnicianDashboard from "./pages/technician/Dashboard";
 import TechnicianJobs from "./pages/technician/Jobs";
@@ -106,6 +111,32 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["customer"]}>
                   <CustomerReviews />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Booking Flow Routes */}
+            <Route
+              path="/booking/service/:id"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <BookService />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/booking/technician/:serviceId"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <TechnicianSelection />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/booking/confirm"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <ConfirmBooking />
                 </ProtectedRoute>
               }
             />
