@@ -21,11 +21,23 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import Layout from "@/components/shared/Layout";
 import {
   Users,
@@ -33,99 +45,170 @@ import {
   Filter,
   Eye,
   Edit,
-  Trash2,
-  UserCheck,
-  UserX,
+  Lock,
+  Unlock,
   Mail,
   Phone,
   MapPin,
   Calendar,
-  Star,
-  Wrench,
-  User,
-  Shield,
+  ShoppingCart,
+  DollarSign,
+  ArrowUpDown,
 } from "lucide-react";
+
+interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  accountStatus: "active" | "locked";
+  registrationDate: string;
+  numberOfOrders: number;
+  totalSpent: string;
+  lastOrderDate?: string;
+  address: string;
+  avatar?: string;
+}
 
 export default function AdminUsers() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [activeTab, setActiveTab] = useState("all");
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null,
+  );
 
-  const users = [
+  const [customers, setCustomers] = useState<Customer[]>([
     {
-      id: "USR-001",
+      id: "CUST-001",
       name: "Jane Smith",
       email: "jane.smith@example.com",
       phone: "+1 (555) 123-4567",
-      role: "customer",
-      status: "active",
-      joinDate: "2024-01-15",
-      lastActive: "2024-01-25",
-      ordersCount: 12,
-      totalSpent: "$1,240",
-      address: "123 Main St, City, State",
+      accountStatus: "active",
+      registrationDate: "2024-01-15",
+      numberOfOrders: 12,
+      totalSpent: "$1,240.50",
+      lastOrderDate: "2024-01-25",
+      address: "123 Main St, Springfield, IL 62701",
     },
     {
-      id: "USR-002",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      phone: "+1 (555) 234-5678",
-      role: "technician",
-      status: "active",
-      joinDate: "2024-01-10",
-      lastActive: "2024-01-25",
-      jobsCompleted: 47,
-      rating: 4.9,
-      specialties: ["Electrical", "HVAC"],
-      address: "456 Oak Ave, City, State",
-    },
-    {
-      id: "USR-003",
-      name: "Sarah Wilson",
-      email: "sarah.wilson@example.com",
-      phone: "+1 (555) 345-6789",
-      role: "technician",
-      status: "active",
-      joinDate: "2024-01-05",
-      lastActive: "2024-01-24",
-      jobsCompleted: 42,
-      rating: 4.8,
-      specialties: ["Plumbing", "General"],
-      address: "789 Pine Road, City, State",
-    },
-    {
-      id: "USR-004",
+      id: "CUST-002",
       name: "Bob Johnson",
       email: "bob.johnson@example.com",
-      phone: "+1 (555) 456-7890",
-      role: "customer",
-      status: "inactive",
-      joinDate: "2024-01-20",
-      lastActive: "2024-01-22",
-      ordersCount: 3,
-      totalSpent: "$280",
-      address: "321 Elm Street, City, State",
+      phone: "+1 (555) 234-5678",
+      accountStatus: "active",
+      registrationDate: "2024-01-20",
+      numberOfOrders: 3,
+      totalSpent: "$280.00",
+      lastOrderDate: "2024-01-22",
+      address: "456 Oak Ave, Springfield, IL 62702",
     },
     {
-      id: "USR-005",
-      name: "Admin User",
-      email: "admin@fix4home.com",
-      phone: "+1 (555) 567-8901",
-      role: "admin",
-      status: "active",
-      joinDate: "2023-01-01",
-      lastActive: "2024-01-25",
-      permissions: ["manage_users", "view_analytics", "system_settings"],
-      address: "FIX4HOME HQ, City, State",
+      id: "CUST-003",
+      name: "Alice Brown",
+      email: "alice.brown@example.com",
+      phone: "+1 (555) 345-6789",
+      accountStatus: "locked",
+      registrationDate: "2024-01-10",
+      numberOfOrders: 8,
+      totalSpent: "$890.75",
+      lastOrderDate: "2024-01-18",
+      address: "789 Pine St, Springfield, IL 62703",
     },
-  ];
+    {
+      id: "CUST-004",
+      name: "Charlie Wilson",
+      email: "charlie.wilson@example.com",
+      phone: "+1 (555) 456-7890",
+      accountStatus: "active",
+      registrationDate: "2024-01-25",
+      numberOfOrders: 1,
+      totalSpent: "$125.00",
+      lastOrderDate: "2024-01-25",
+      address: "321 Elm St, Springfield, IL 62704",
+    },
+    {
+      id: "CUST-005",
+      name: "Diana Garcia",
+      email: "diana.garcia@example.com",
+      phone: "+1 (555) 567-8901",
+      accountStatus: "active",
+      registrationDate: "2024-01-05",
+      numberOfOrders: 15,
+      totalSpent: "$2,150.25",
+      lastOrderDate: "2024-01-24",
+      address: "654 Maple Dr, Springfield, IL 62705",
+    },
+  ]);
+
+  const handleSort = (column: string) => {
+    if (sortBy === column) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortOrder("asc");
+    }
+  };
+
+  const handleToggleAccountStatus = async (customerId: string) => {
+    setIsLoading(true);
+    try {
+      setCustomers((prev) =>
+        prev.map((customer) =>
+          customer.id === customerId
+            ? {
+                ...customer,
+                accountStatus:
+                  customer.accountStatus === "active" ? "locked" : "active",
+              }
+            : customer,
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to toggle account status:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const filteredAndSortedCustomers = customers
+    .filter((customer) => {
+      const matchesSearch =
+        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.phone.includes(searchTerm) ||
+        customer.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" || customer.accountStatus === statusFilter;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      let aValue = a[sortBy as keyof Customer];
+      let bValue = b[sortBy as keyof Customer];
+
+      if (sortBy === "numberOfOrders") {
+        aValue = a.numberOfOrders;
+        bValue = b.numberOfOrders;
+      } else if (sortBy === "totalSpent") {
+        aValue = parseFloat(a.totalSpent.replace("$", "").replace(",", ""));
+        bValue = parseFloat(b.totalSpent.replace("$", "").replace(",", ""));
+      } else if (sortBy === "registrationDate") {
+        aValue = new Date(a.registrationDate).getTime();
+        bValue = new Date(b.registrationDate).getTime();
+      }
+
+      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
 
   const getStatusIcon = (status: string) => {
     return status === "active" ? (
-      <UserCheck className="w-4 h-4 text-green-600" />
+      <Unlock className="w-4 h-4 text-green-600" />
     ) : (
-      <UserX className="w-4 h-4 text-red-600" />
+      <Lock className="w-4 h-4 text-red-600" />
     );
   };
 
@@ -135,72 +218,23 @@ export default function AdminUsers() {
       : "bg-red-100 text-red-800 border-red-200";
   };
 
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case "admin":
-        return <Shield className="w-4 h-4 text-purple-600" />;
-      case "technician":
-        return <Wrench className="w-4 h-4 text-blue-600" />;
-      case "customer":
-        return <User className="w-4 h-4 text-green-600" />;
-      default:
-        return <User className="w-4 h-4 text-gray-600" />;
-    }
-  };
-
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case "admin":
-        return "bg-purple-100 text-purple-800 border-purple-200";
-      case "technician":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "customer":
-        return "bg-green-100 text-green-800 border-green-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
-
-  const filterUsersByTab = (users: any[], tab: string) => {
-    switch (tab) {
-      case "customers":
-        return users.filter((user) => user.role === "customer");
-      case "technicians":
-        return users.filter((user) => user.role === "technician");
-      case "admins":
-        return users.filter((user) => user.role === "admin");
-      default:
-        return users;
-    }
-  };
-
-  const filteredUsers = filterUsersByTab(users, activeTab).filter((user) => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === "all" || user.role === roleFilter;
-    const matchesStatus =
-      statusFilter === "all" || user.status === statusFilter;
-    return matchesSearch && matchesRole && matchesStatus;
-  });
-
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`w-3 h-3 ${
-          i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
-        }`}
-      />
-    ));
-  };
+  const SortableHeader = ({ column, children }: any) => (
+    <TableHead
+      className="cursor-pointer hover:bg-muted/50 select-none"
+      onClick={() => handleSort(column)}
+    >
+      <div className="flex items-center gap-2">
+        {children}
+        <ArrowUpDown className="w-4 h-4" />
+      </div>
+    </TableHead>
+  );
 
   return (
     <Layout
       breadcrumbs={[
         { label: "Admin Dashboard", href: "/admin/dashboard" },
-        { label: "Users" },
+        { label: "User Management" },
       ]}
     >
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-purple-950 dark:to-indigo-900">
@@ -208,38 +242,14 @@ export default function AdminUsers() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              User Management
+              Customer Management
             </h1>
             <p className="text-muted-foreground">
-              Manage customers, technicians, and administrators
+              View and manage customer accounts, orders, and account status
             </p>
           </div>
 
-          {/* User Type Tabs */}
-          <Card className="mb-6">
-            <CardContent className="p-6">
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="all">
-                    All Users ({users.length})
-                  </TabsTrigger>
-                  <TabsTrigger value="customers">
-                    Customers (
-                    {users.filter((u) => u.role === "customer").length})
-                  </TabsTrigger>
-                  <TabsTrigger value="technicians">
-                    Technicians (
-                    {users.filter((u) => u.role === "technician").length})
-                  </TabsTrigger>
-                  <TabsTrigger value="admins">
-                    Admins ({users.filter((u) => u.role === "admin").length})
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </CardContent>
-          </Card>
-
-          {/* Filters */}
+          {/* Search and Filters */}
           <Card className="mb-6">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row gap-4">
@@ -247,26 +257,12 @@ export default function AdminUsers() {
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
-                      placeholder="Search users by name, email, or ID..."
+                      placeholder="Search by name, email, phone, or customer ID..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>
-                </div>
-                <div className="w-full md:w-48">
-                  <Select value={roleFilter} onValueChange={setRoleFilter}>
-                    <SelectTrigger>
-                      <Filter className="w-4 h-4 mr-2" />
-                      <SelectValue placeholder="Filter by role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Roles</SelectItem>
-                      <SelectItem value="customer">Customer</SelectItem>
-                      <SelectItem value="technician">Technician</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
                 <div className="w-full md:w-48">
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -277,7 +273,7 @@ export default function AdminUsers() {
                     <SelectContent>
                       <SelectItem value="all">All Status</SelectItem>
                       <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="inactive">Inactive</SelectItem>
+                      <SelectItem value="locked">Locked</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -285,21 +281,28 @@ export default function AdminUsers() {
             </CardContent>
           </Card>
 
-          {/* Users Table */}
+          {/* Customers Table */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="w-5 h-5" />
-                Users ({filteredUsers.length})
+                Customers ({filteredAndSortedCustomers.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {filteredUsers.length === 0 ? (
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+                  <p className="text-muted-foreground mt-2">Loading...</p>
+                </div>
+              ) : filteredAndSortedCustomers.length === 0 ? (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                     <Search className="w-8 h-8 text-muted-foreground" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">No users found</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    No customers found
+                  </h3>
                   <p className="text-muted-foreground">
                     Try adjusting your search or filters
                   </p>
@@ -309,152 +312,268 @@ export default function AdminUsers() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>User</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Performance</TableHead>
-                        <TableHead>Last Active</TableHead>
+                        <SortableHeader column="name">Customer</SortableHeader>
+                        <SortableHeader column="accountStatus">
+                          Status
+                        </SortableHeader>
+                        <SortableHeader column="registrationDate">
+                          Registration Date
+                        </SortableHeader>
+                        <SortableHeader column="numberOfOrders">
+                          Orders
+                        </SortableHeader>
+                        <SortableHeader column="totalSpent">
+                          Total Spent
+                        </SortableHeader>
                         <TableHead>Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {filteredUsers.map((user) => (
-                        <TableRow key={user.id}>
+                      {filteredAndSortedCustomers.map((customer) => (
+                        <TableRow key={customer.id}>
                           <TableCell>
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                                {getRoleIcon(user.role)}
+                                <span className="text-white font-semibold">
+                                  {customer.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </span>
                               </div>
                               <div>
-                                <p className="font-medium">{user.name}</p>
-                                <p className="text-sm text-muted-foreground">
-                                  {user.email}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                  ID: {user.id}
-                                </p>
+                                <p className="font-medium">{customer.name}</p>
+                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                  <Mail className="w-3 h-3" />
+                                  {customer.email}
+                                </div>
+                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                  <Phone className="w-3 h-3" />
+                                  {customer.phone}
+                                </div>
                               </div>
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Badge
-                              variant="outline"
-                              className={getRoleColor(user.role)}
-                            >
-                              {user.role}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
                             <div className="flex items-center gap-2">
-                              {getStatusIcon(user.status)}
+                              {getStatusIcon(customer.accountStatus)}
                               <Badge
                                 variant="outline"
-                                className={getStatusColor(user.status)}
+                                className={getStatusColor(
+                                  customer.accountStatus,
+                                )}
                               >
-                                {user.status}
+                                {customer.accountStatus}
                               </Badge>
                             </div>
                           </TableCell>
                           <TableCell>
-                            {user.role === "customer" && (
-                              <div className="text-sm">
-                                <p className="font-medium">
-                                  {user.ordersCount} orders
-                                </p>
-                                <p className="text-muted-foreground">
-                                  {user.totalSpent} spent
-                                </p>
-                              </div>
-                            )}
-                            {user.role === "technician" && (
-                              <div className="text-sm">
-                                <div className="flex items-center gap-1 mb-1">
-                                  <div className="flex">
-                                    {renderStars(user.rating)}
-                                  </div>
-                                  <span className="text-xs">{user.rating}</span>
-                                </div>
-                                <p className="font-medium">
-                                  {user.jobsCompleted} jobs
-                                </p>
-                                <p className="text-muted-foreground">
-                                  {user.specialties?.join(", ")}
-                                </p>
-                              </div>
-                            )}
-                            {user.role === "admin" && (
-                              <div className="text-sm">
-                                <p className="font-medium">Admin Access</p>
-                                <p className="text-muted-foreground">
-                                  Full permissions
-                                </p>
-                              </div>
-                            )}
+                            <div className="flex items-center gap-1 text-sm">
+                              <Calendar className="w-3 h-3 text-muted-foreground" />
+                              {new Date(
+                                customer.registrationDate,
+                              ).toLocaleDateString()}
+                            </div>
                           </TableCell>
                           <TableCell>
-                            <div className="text-sm">
-                              <p>{user.lastActive}</p>
-                              <p className="text-muted-foreground">
-                                Joined {user.joinDate}
-                              </p>
+                            <div className="flex items-center gap-1">
+                              <ShoppingCart className="w-4 h-4 text-muted-foreground" />
+                              <span className="font-medium">
+                                {customer.numberOfOrders}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1 font-medium text-green-600">
+                              <DollarSign className="w-4 h-4" />
+                              {customer.totalSpent}
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
+                              {/* View Details Dialog */}
                               <Dialog>
                                 <DialogTrigger asChild>
-                                  <Button variant="outline" size="sm">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() =>
+                                      setSelectedCustomer(customer)
+                                    }
+                                  >
                                     <Eye className="w-4 h-4" />
                                   </Button>
                                 </DialogTrigger>
                                 <DialogContent className="max-w-2xl">
                                   <DialogHeader>
                                     <DialogTitle>
-                                      User Details - {user.name}
+                                      Customer Details - {customer.name}
                                     </DialogTitle>
+                                    <DialogDescription>
+                                      View detailed information about this
+                                      customer
+                                    </DialogDescription>
                                   </DialogHeader>
-                                  <div className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-4 text-sm">
-                                      <div>
-                                        <strong>Contact:</strong>
-                                        <p>{user.email}</p>
-                                        <p>{user.phone}</p>
-                                      </div>
-                                      <div>
-                                        <strong>Address:</strong>
-                                        <p>{user.address}</p>
-                                      </div>
-                                    </div>
-                                    {user.role === "technician" && (
-                                      <div>
-                                        <strong>Specialties:</strong>
-                                        <div className="flex gap-2 mt-1">
-                                          {user.specialties?.map(
-                                            (specialty, index) => (
+                                  {selectedCustomer && (
+                                    <div className="space-y-6">
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                          <h4 className="font-semibold mb-2">
+                                            Contact Information
+                                          </h4>
+                                          <div className="space-y-2 text-sm">
+                                            <div className="flex items-center gap-2">
+                                              <Mail className="w-4 h-4 text-muted-foreground" />
+                                              {selectedCustomer.email}
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                              <Phone className="w-4 h-4 text-muted-foreground" />
+                                              {selectedCustomer.phone}
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                              <MapPin className="w-4 h-4 text-muted-foreground" />
+                                              {selectedCustomer.address}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div>
+                                          <h4 className="font-semibold mb-2">
+                                            Account Information
+                                          </h4>
+                                          <div className="space-y-2 text-sm">
+                                            <div>
+                                              <span className="text-muted-foreground">
+                                                Customer ID:
+                                              </span>{" "}
+                                              {selectedCustomer.id}
+                                            </div>
+                                            <div>
+                                              <span className="text-muted-foreground">
+                                                Status:
+                                              </span>{" "}
                                               <Badge
-                                                key={index}
-                                                variant="secondary"
+                                                variant="outline"
+                                                className={getStatusColor(
+                                                  selectedCustomer.accountStatus,
+                                                )}
                                               >
-                                                {specialty}
+                                                {selectedCustomer.accountStatus}
                                               </Badge>
-                                            ),
-                                          )}
+                                            </div>
+                                            <div>
+                                              <span className="text-muted-foreground">
+                                                Member since:
+                                              </span>{" "}
+                                              {new Date(
+                                                selectedCustomer.registrationDate,
+                                              ).toLocaleDateString()}
+                                            </div>
+                                          </div>
                                         </div>
                                       </div>
-                                    )}
-                                  </div>
+                                      <div>
+                                        <h4 className="font-semibold mb-2">
+                                          Order History
+                                        </h4>
+                                        <div className="grid grid-cols-3 gap-4 text-sm">
+                                          <div className="bg-muted p-3 rounded-lg">
+                                            <p className="text-muted-foreground">
+                                              Total Orders
+                                            </p>
+                                            <p className="font-semibold text-lg">
+                                              {selectedCustomer.numberOfOrders}
+                                            </p>
+                                          </div>
+                                          <div className="bg-muted p-3 rounded-lg">
+                                            <p className="text-muted-foreground">
+                                              Total Spent
+                                            </p>
+                                            <p className="font-semibold text-lg text-green-600">
+                                              {selectedCustomer.totalSpent}
+                                            </p>
+                                          </div>
+                                          <div className="bg-muted p-3 rounded-lg">
+                                            <p className="text-muted-foreground">
+                                              Last Order
+                                            </p>
+                                            <p className="font-semibold text-lg">
+                                              {selectedCustomer.lastOrderDate
+                                                ? new Date(
+                                                    selectedCustomer.lastOrderDate,
+                                                  ).toLocaleDateString()
+                                                : "None"}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
                                 </DialogContent>
                               </Dialog>
+
+                              {/* Edit Button */}
                               <Button variant="outline" size="sm">
                                 <Edit className="w-4 h-4" />
                               </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-red-600 hover:text-red-700"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
+
+                              {/* Lock/Unlock Account with Confirmation */}
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className={
+                                      customer.accountStatus === "active"
+                                        ? "text-red-600 hover:text-red-700"
+                                        : "text-green-600 hover:text-green-700"
+                                    }
+                                  >
+                                    {customer.accountStatus === "active" ? (
+                                      <Lock className="w-4 h-4" />
+                                    ) : (
+                                      <Unlock className="w-4 h-4" />
+                                    )}
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      {customer.accountStatus === "active"
+                                        ? "Lock Account"
+                                        : "Unlock Account"}
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Are you sure you want to{" "}
+                                      {customer.accountStatus === "active"
+                                        ? "lock"
+                                        : "unlock"}{" "}
+                                      the account for{" "}
+                                      <strong>{customer.name}</strong>?{" "}
+                                      {customer.accountStatus === "active" &&
+                                        "This will prevent them from accessing their account and placing new orders."}
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                      Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() =>
+                                        handleToggleAccountStatus(customer.id)
+                                      }
+                                      className={
+                                        customer.accountStatus === "active"
+                                          ? "bg-red-600 hover:bg-red-700"
+                                          : "bg-green-600 hover:bg-green-700"
+                                      }
+                                    >
+                                      {customer.accountStatus === "active"
+                                        ? "Lock Account"
+                                        : "Unlock Account"}
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
                             </div>
                           </TableCell>
                         </TableRow>
