@@ -267,7 +267,7 @@ export default function TechnicianDashboard() {
                       <Bell className="w-4 h-4 mr-2" />
                       Notifications
                       {unreadCount > 0 && (
-                        <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs">
+                        <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs flex items-center justify-center">
                           {unreadCount}
                         </Badge>
                       )}
