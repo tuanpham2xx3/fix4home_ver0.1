@@ -16,12 +16,10 @@ const App = () => {
   return (
     <React.StrictMode>
       <BrowserRouter basename={basename}>
-        <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </React.StrictMode>
   );
