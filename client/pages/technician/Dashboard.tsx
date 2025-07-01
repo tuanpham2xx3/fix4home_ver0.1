@@ -328,61 +328,6 @@ export default function TechnicianDashboard() {
                     </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      <Menu className="w-4 h-4 mr-2" />
-                      Quick Menu
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                      <Link to="/technician/jobs" className="flex items-center">
-                        <Briefcase className="w-4 h-4 mr-2" />
-                        Jobs
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        to="/technician/calendar"
-                        className="flex items-center"
-                      >
-                        <CalendarDays className="w-4 h-4 mr-2" />
-                        Calendar
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        to="/technician/profile"
-                        className="flex items-center"
-                      >
-                        <User className="w-4 h-4 mr-2" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        to="/technician/reviews"
-                        className="flex items-center"
-                      >
-                        <Star className="w-4 h-4 mr-2" />
-                        Reviews
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/settings" className="flex items-center">
-                        <Settings className="w-4 h-4 mr-2" />
-                        Settings
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-red-600">
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
               </div>
             </div>
           </div>
