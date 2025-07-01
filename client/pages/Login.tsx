@@ -6,7 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Layout from "@/components/shared/Layout";
+import { useAuth, UserRole } from "@/contexts/AuthContext";
 import {
   Wrench,
   Phone,
@@ -21,13 +29,15 @@ import {
   ArrowRight,
   Home,
   ChevronRight,
+  Shield,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 interface LoginFormData {
   email: string;
   password: string;
   rememberMe: boolean;
+  role: UserRole;
 }
 
 interface LoginErrors {
@@ -37,18 +47,23 @@ interface LoginErrors {
 }
 
 export default function Login() {
-  const [activeTab, setActiveTab] = useState<"customer" | "technician">(
-    "customer",
-  );
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth();
+  const [activeTab, setActiveTab] = useState<UserRole>("customer");
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
     rememberMe: false,
+    role: "customer",
   });
   const [errors, setErrors] = useState<LoginErrors>({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [attemptCount, setAttemptCount] = useState(0);
+
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
   const validateForm = (): boolean => {
     const newErrors: LoginErrors = {};
@@ -105,42 +120,10 @@ export default function Login() {
     setErrors({});
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Simulate different error scenarios
-      const scenario = Math.random();
-
-      if (scenario < 0.3) {
-        // Invalid credentials
-        setAttemptCount((prev) => prev + 1);
-        throw new Error("Invalid email/phone or password. Please try again.");
-      } else if (scenario < 0.4 && attemptCount >= 2) {
-        // Too many attempts
-        throw new Error(
-          "Too many failed login attempts. Please try again in 15 minutes or reset your password.",
-        );
-      } else if (scenario < 0.5) {
-        // Account not found
-        throw new Error(
-          `No ${activeTab} account found with this email/phone. Please check your credentials or register a new account.`,
-        );
-      }
-
-      // Success - redirect to appropriate dashboard
-      const dashboardUrl =
-        activeTab === "customer"
-          ? "/customer-dashboard"
-          : "/technician-dashboard";
-
-      // In a real app, you would use router.push() or similar
-      console.log(`Redirecting to ${dashboardUrl}`);
-      alert(`Login successful! Redirecting to ${activeTab} dashboard...`);
-
-      // Reset form
-      setFormData({ email: "", password: "", rememberMe: false });
-      setAttemptCount(0);
+      await login(formData.email, formData.password, formData.role);
+      // Navigation is handled by AuthContext
     } catch (error) {
+      setAttemptCount((prev) => prev + 1);
       setErrors({
         general:
           error instanceof Error
@@ -183,15 +166,18 @@ export default function Login() {
                 <CardContent>
                   <Tabs
                     value={activeTab}
-                    onValueChange={(value) =>
-                      setActiveTab(value as "customer" | "technician")
-                    }
+                    onValueChange={(value) => {
+                      const role = value as UserRole;
+                      setActiveTab(role);
+                      handleInputChange("role", role);
+                    }}
                     className="w-full"
                   >
-                    <TabsList className="grid w-full grid-cols-2 mb-8">
+                    <TabsList className="grid w-full grid-cols-3 mb-8">
                       <TabsTrigger
                         value="customer"
                         className="flex items-center space-x-2"
+                        onClick={() => handleInputChange("role", "customer")}
                       >
                         <User className="w-4 h-4" />
                         <span>Customer</span>
@@ -199,9 +185,18 @@ export default function Login() {
                       <TabsTrigger
                         value="technician"
                         className="flex items-center space-x-2"
+                        onClick={() => handleInputChange("role", "technician")}
                       >
                         <Settings className="w-4 h-4" />
                         <span>Technician</span>
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="admin"
+                        className="flex items-center space-x-2"
+                        onClick={() => handleInputChange("role", "admin")}
+                      >
+                        <Shield className="w-4 h-4" />
+                        <span>Admin</span>
                       </TabsTrigger>
                     </TabsList>
 
@@ -229,6 +224,21 @@ export default function Login() {
                         isBlocked={isBlocked}
                         attemptCount={attemptCount}
                         userType="technician"
+                        onInputChange={handleInputChange}
+                        onTogglePassword={() => setShowPassword(!showPassword)}
+                        onSubmit={handleSubmit}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="admin" className="space-y-0">
+                      <LoginForm
+                        formData={formData}
+                        errors={errors}
+                        showPassword={showPassword}
+                        isLoading={isLoading}
+                        isBlocked={isBlocked}
+                        attemptCount={attemptCount}
+                        userType="admin"
                         onInputChange={handleInputChange}
                         onTogglePassword={() => setShowPassword(!showPassword)}
                         onSubmit={handleSubmit}
@@ -274,7 +284,7 @@ interface LoginFormProps {
   isLoading: boolean;
   isBlocked: boolean;
   attemptCount: number;
-  userType: "customer" | "technician";
+  userType: UserRole;
   onInputChange: (field: keyof LoginFormData, value: any) => void;
   onTogglePassword: () => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -438,10 +448,15 @@ function LoginForm({
               <User className="w-4 h-4 inline mr-1" />
               Customer accounts can book services and manage orders
             </>
-          ) : (
+          ) : userType === "technician" ? (
             <>
               <Settings className="w-4 h-4 inline mr-1" />
               Technician accounts can receive jobs and manage service requests
+            </>
+          ) : (
+            <>
+              <Shield className="w-4 h-4 inline mr-1" />
+              Admin accounts have full system access and management capabilities
             </>
           )}
         </div>
