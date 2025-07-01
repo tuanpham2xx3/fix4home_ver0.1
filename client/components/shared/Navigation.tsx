@@ -62,32 +62,6 @@ export default function Navigation() {
   const userLinks =
     isAuthenticated && userRole ? roleBasedLinks[userRole] || [] : [];
 
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case "admin":
-        return <Shield className="w-4 h-4" />;
-      case "technician":
-        return <Settings className="w-4 h-4" />;
-      case "customer":
-        return <User className="w-4 h-4" />;
-      default:
-        return <User className="w-4 h-4" />;
-    }
-  };
-
-  const getRoleBadgeColor = (role: string) => {
-    switch (role) {
-      case "admin":
-        return "bg-purple-100 text-purple-800 border-purple-200";
-      case "technician":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "customer":
-        return "bg-green-100 text-green-800 border-green-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
-
   return (
     <nav className="border-b bg-white sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-4">
