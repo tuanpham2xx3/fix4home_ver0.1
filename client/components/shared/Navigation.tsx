@@ -56,8 +56,12 @@ export default function Navigation() {
       { path: "/technician/profile", label: "Profile" },
     ],
     admin: [
-      { path: "/admin/dashboard", label: "Admin Dashboard" },
-      { path: "/admin/users", label: "Manage Users" },
+      { path: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { path: "/admin/users", label: "Users", icon: Users },
+      { path: "/admin/technicians", label: "Technicians", icon: Wrench },
+      { path: "/admin/services", label: "Services", icon: Settings },
+      { path: "/admin/orders", label: "Orders", icon: ShoppingCart },
+      { path: "/admin/reports", label: "Reports", icon: FileText },
     ],
   };
 
