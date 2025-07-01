@@ -49,6 +49,8 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 import AdminTechnicians from "./pages/admin/Technicians";
 import AdminOrders from "./pages/admin/Orders";
+import AdminServices from "./pages/admin/Services";
+import AdminReports from "./pages/admin/Reports";
 
 const queryClient = new QueryClient();
 
