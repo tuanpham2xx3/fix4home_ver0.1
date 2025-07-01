@@ -150,15 +150,15 @@ export default function UserMenu() {
       {/* Avatar Button */}
       <Button
         variant="ghost"
-        className="relative h-10 w-10 rounded-full hover:bg-accent/10 focus:bg-accent/10"
+        className="relative h-11 w-11 rounded-full hover:bg-accent/20 focus:bg-accent/20 transition-all duration-200 hover:scale-105"
         onClick={() => setSidebarOpen(true)}
       >
-        <Avatar className="h-10 w-10 border-2 border-primary/20">
+        <Avatar className="h-10 w-10 border-2 border-primary/30 shadow-sm">
           <AvatarImage
             src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
             alt={user.name}
           />
-          <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground">
+          <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground font-semibold">
             {getAvatarFallback(user.name)}
           </AvatarFallback>
         </Avatar>
@@ -167,120 +167,154 @@ export default function UserMenu() {
       {/* Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-50 transition-opacity"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-all duration-300 ease-out"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-background border-l shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 left-0 h-full w-80 bg-background/95 backdrop-blur-xl border-r border-border/50 shadow-2xl z-50 transform transition-all duration-300 ease-out rounded-r-2xl ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full relative">
+          {/* Gradient Background Accent */}
+          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-tr-2xl" />
+
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b">
-            <h2 className="text-lg font-semibold">Menu</h2>
+          <div className="relative flex items-center justify-between p-6 pb-4">
+            <h2 className="text-2xl font-bold text-foreground">Menu</h2>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setSidebarOpen(false)}
-              className="h-8 w-8"
+              className="h-9 w-9 rounded-full hover:bg-accent/20 transition-all duration-200 hover:scale-105"
             >
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5" />
             </Button>
           </div>
 
           {/* User Info */}
-          <div className="p-6 border-b">
-            <div className="flex items-center space-x-3">
-              <Avatar className="h-16 w-16 border-2 border-primary/20">
-                <AvatarImage
-                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
-                  alt={user.name}
-                />
-                <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-lg">
-                  {getAvatarFallback(user.name)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <p className="text-base font-semibold truncate">{user.name}</p>
-                <p className="text-sm text-muted-foreground truncate">
+          <div className="relative px-6 pb-6">
+            <div className="flex items-start space-x-4">
+              <div className="relative">
+                <Avatar className="h-16 w-16 border-3 border-primary/20 shadow-lg ring-2 ring-background">
+                  <AvatarImage
+                    src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
+                    alt={user.name}
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-lg font-bold">
+                    {getAvatarFallback(user.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-background rounded-full" />
+              </div>
+              <div className="flex-1 min-w-0 mt-1">
+                <h3 className="text-lg font-bold text-foreground truncate">
+                  {user.name}
+                </h3>
+                <p className="text-sm text-muted-foreground/80 truncate mb-2">
                   {user.email}
                 </p>
                 <Badge
                   variant="outline"
-                  className={`text-xs mt-2 ${getRoleBadgeColor(userRole)}`}
+                  className={`text-xs font-medium px-3 py-1 ${getRoleBadgeColor(userRole)} border-none shadow-sm`}
                 >
-                  <span className="mr-1">{getRoleIcon(userRole)}</span>
+                  <span className="mr-1.5">{getRoleIcon(userRole)}</span>
                   {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
                 </Badge>
               </div>
             </div>
           </div>
 
-          {/* Navigation Items */}
-          <div className="flex-1 overflow-y-auto p-4">
-            <div className="space-y-2">
-              {menuItems.map((item, index) => (
-                <Link
-                  key={index}
-                  to={item.href}
-                  onClick={() => setSidebarOpen(false)}
-                  className="flex items-center space-x-3 px-4 py-3 text-sm rounded-lg hover:bg-accent/50 transition-colors group"
-                >
-                  <span className="text-muted-foreground group-hover:text-foreground">
-                    {item.icon}
-                  </span>
-                  <span className="font-medium">{item.label}</span>
-                </Link>
-              ))}
-            </div>
+          <Separator className="mx-6 opacity-30" />
 
-            <Separator className="my-6" />
+          {/* Navigation Items */}
+          <div className="flex-1 overflow-y-auto px-4 py-6">
+            <div className="space-y-1">
+              {menuItems.map((item, index) => {
+                const isActive = isActiveRoute(item.href);
+                return (
+                  <Link
+                    key={index}
+                    to={item.href}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`group flex items-center justify-between px-4 py-3.5 text-sm rounded-xl transition-all duration-200 hover:scale-[1.02] ${
+                      isActive
+                        ? "bg-primary/10 text-primary border-l-4 border-primary shadow-sm"
+                        : "hover:bg-accent/50 text-foreground"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <span
+                        className={`transition-colors duration-200 ${
+                          isActive
+                            ? "text-primary"
+                            : "text-muted-foreground group-hover:text-foreground"
+                        }`}
+                      >
+                        {item.icon}
+                      </span>
+                      <span className="font-semibold">{item.label}</span>
+                    </div>
+                    {isActive && (
+                      <ChevronRight className="w-4 h-4 text-primary" />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
 
             {/* Quick Actions for Technicians */}
             {userRole === "technician" && (
-              <div className="space-y-2">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-4 mb-3">
-                  Quick Actions
-                </p>
-                <Link
-                  to="/technician/jobs?filter=pending"
-                  onClick={() => setSidebarOpen(false)}
-                  className="flex items-center space-x-3 px-4 py-3 text-sm rounded-lg hover:bg-accent/50 transition-colors group"
-                >
-                  <span className="text-muted-foreground group-hover:text-foreground">
-                    <ClipboardList className="w-4 h-4" />
-                  </span>
-                  <span className="font-medium">Browse Available Jobs</span>
-                </Link>
-                <Link
-                  to="/technician/calendar"
-                  onClick={() => setSidebarOpen(false)}
-                  className="flex items-center space-x-3 px-4 py-3 text-sm rounded-lg hover:bg-accent/50 transition-colors group"
-                >
-                  <span className="text-muted-foreground group-hover:text-foreground">
-                    <Calendar className="w-4 h-4" />
-                  </span>
-                  <span className="font-medium">Today's Schedule</span>
-                </Link>
-              </div>
+              <>
+                <Separator className="my-6 opacity-30" />
+                <div className="space-y-1">
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider px-4 mb-4">
+                    Quick Actions
+                  </h4>
+                  <Link
+                    to="/technician/jobs?filter=pending"
+                    onClick={() => setSidebarOpen(false)}
+                    className="group flex items-center space-x-3 px-4 py-3.5 text-sm rounded-xl hover:bg-accent/50 transition-all duration-200 hover:scale-[1.02]"
+                  >
+                    <span className="text-blue-500 group-hover:text-blue-600 transition-colors duration-200">
+                      <ClipboardList className="w-4 h-4" />
+                    </span>
+                    <span className="font-semibold text-foreground">
+                      Browse Available Jobs
+                    </span>
+                  </Link>
+                  <Link
+                    to="/technician/calendar"
+                    onClick={() => setSidebarOpen(false)}
+                    className="group flex items-center space-x-3 px-4 py-3.5 text-sm rounded-xl hover:bg-accent/50 transition-all duration-200 hover:scale-[1.02]"
+                  >
+                    <span className="text-green-500 group-hover:text-green-600 transition-colors duration-200">
+                      <Calendar className="w-4 h-4" />
+                    </span>
+                    <span className="font-semibold text-foreground">
+                      Today's Schedule
+                    </span>
+                  </Link>
+                </div>
+              </>
             )}
           </div>
 
           {/* Bottom Actions */}
-          <div className="p-4 border-t">
+          <div className="p-4">
+            <Separator className="mb-4 opacity-30" />
             <Button
               onClick={() => {
                 logout();
                 setSidebarOpen(false);
               }}
               variant="ghost"
-              className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+              className="w-full justify-start py-3.5 px-4 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all duration-200 hover:scale-[1.02] font-semibold"
             >
-              <LogOut className="w-4 h-4 mr-3" />
+              <LogOut className="w-5 h-5 mr-3" />
               <span>Logout</span>
             </Button>
           </div>
