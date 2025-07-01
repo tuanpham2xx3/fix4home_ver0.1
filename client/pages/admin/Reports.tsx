@@ -30,21 +30,22 @@ import {
   Star,
   Wrench,
 } from "lucide-react";
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+// Temporarily disabled recharts for deployment debugging
+// import {
+//   LineChart,
+//   Line,
+//   BarChart,
+//   Bar,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+//   Tooltip,
+//   ResponsiveContainer,
+//   Legend,
+//   PieChart,
+//   Pie,
+//   Cell,
+// } from "recharts";
 
 export default function AdminReports() {
   const [timeFilter, setTimeFilter] = useState("month");
