@@ -213,7 +213,8 @@ const App = () => {
                   }
                 />
 
-                {/* Admin Protected Routes */}
+                {/* Admin Protected Routes - temporarily disabled for deployment debugging */}
+                {/*
                 <Route
                   path="/admin/dashboard"
                   element={
@@ -262,6 +263,7 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                */}
 
                 {/* Catch-all route - must be last */}
                 <Route path="*" element={<NotFound />} />
