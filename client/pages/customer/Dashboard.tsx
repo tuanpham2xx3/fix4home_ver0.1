@@ -366,10 +366,6 @@ export default function CustomerDashboard() {
                   Reviews
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" onClick={logout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
             </div>
           </div>
 
