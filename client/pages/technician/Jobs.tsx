@@ -60,8 +60,16 @@ export default function TechnicianJobs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [viewMode, setViewMode] = useState<"table" | "cards">("cards");
 
-  const jobs = [
+  const itemsPerPage = 10;
+
+  // Expanded mock data for demonstration
+  const allJobs = [
     {
       id: "JOB-001",
       service: "AC Repair",
@@ -72,9 +80,10 @@ export default function TechnicianJobs() {
       priority: "high",
       date: "2024-01-25",
       time: "09:00 AM",
-      payment: "$120",
+      payment: 120,
       description: "AC unit not cooling properly, needs diagnostic and repair",
       estimatedDuration: "2 hours",
+      distance: "2.3 miles",
     },
     {
       id: "JOB-002",
@@ -86,10 +95,11 @@ export default function TechnicianJobs() {
       priority: "medium",
       date: "2024-01-25",
       time: "02:00 PM",
-      payment: "$85",
+      payment: 85,
       description: "Kitchen sink leak repair",
       estimatedDuration: "1.5 hours",
       startedAt: "02:15 PM",
+      distance: "1.8 miles",
     },
     {
       id: "JOB-003",
@@ -101,11 +111,12 @@ export default function TechnicianJobs() {
       priority: "low",
       date: "2024-01-24",
       time: "04:30 PM",
-      payment: "$95",
+      payment: 95,
       description: "Annual electrical safety inspection",
       estimatedDuration: "1 hour",
       completedAt: "05:15 PM",
       rating: 5,
+      distance: "3.1 miles",
     },
     {
       id: "JOB-004",
@@ -113,15 +124,88 @@ export default function TechnicianJobs() {
       customer: "Mike Davis",
       customerPhone: "+1 (555) 456-7890",
       address: "321 Elm Street, City, State",
-      status: "available",
+      status: "pending",
       priority: "medium",
       date: "2024-01-26",
       time: "10:00 AM",
-      payment: "$110",
+      payment: 110,
       description: "Washing machine not spinning properly",
       estimatedDuration: "2 hours",
+      distance: "4.2 miles",
+    },
+    {
+      id: "JOB-005",
+      service: "HVAC Maintenance",
+      customer: "Sarah Johnson",
+      customerPhone: "+1 (555) 567-8901",
+      address: "654 Maple Ave, City, State",
+      status: "scheduled",
+      priority: "low",
+      date: "2024-01-27",
+      time: "11:00 AM",
+      payment: 150,
+      description: "Annual HVAC system maintenance and filter replacement",
+      estimatedDuration: "3 hours",
+      distance: "5.7 miles",
+    },
+    {
+      id: "JOB-006",
+      service: "Water Heater Repair",
+      customer: "Tom Wilson",
+      customerPhone: "+1 (555) 678-9012",
+      address: "987 Oak Street, City, State",
+      status: "cancelled",
+      priority: "high",
+      date: "2024-01-23",
+      time: "08:00 AM",
+      payment: 200,
+      description: "Water heater not producing hot water",
+      estimatedDuration: "2.5 hours",
+      cancelledReason: "Customer rescheduled",
+      distance: "6.1 miles",
+    },
+    {
+      id: "JOB-007",
+      service: "Lighting Installation",
+      customer: "Emma Brown",
+      customerPhone: "+1 (555) 789-0123",
+      address: "246 Cedar Lane, City, State",
+      status: "pending",
+      priority: "low",
+      date: "2024-01-28",
+      time: "02:00 PM",
+      payment: 75,
+      description: "Install new LED ceiling lights in living room",
+      estimatedDuration: "1.5 hours",
+      distance: "2.9 miles",
+    },
+    {
+      id: "JOB-008",
+      service: "Dishwasher Repair",
+      customer: "Chris Lee",
+      customerPhone: "+1 (555) 890-1234",
+      address: "135 Birch Ave, City, State",
+      status: "completed",
+      priority: "medium",
+      date: "2024-01-22",
+      time: "03:30 PM",
+      payment: 90,
+      description: "Dishwasher not draining properly",
+      estimatedDuration: "1 hour",
+      completedAt: "04:20 PM",
+      rating: 4,
+      distance: "3.4 miles",
     },
   ];
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
