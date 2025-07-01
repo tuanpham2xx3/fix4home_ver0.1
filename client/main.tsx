@@ -25,6 +25,7 @@ import Privacy from "./pages/Privacy";
 // Customer Pages
 import CustomerDashboard from "./pages/customer/Dashboard";
 import CustomerOrders from "./pages/customer/Orders";
+import CustomerOrderDetail from "./pages/customer/OrderDetail";
 import CustomerProfile from "./pages/customer/Profile";
 
 // Technician Pages
@@ -87,7 +88,7 @@ const App = () => (
               path="/customer/orders/:id"
               element={
                 <ProtectedRoute allowedRoles={["customer"]}>
-                  <CustomerOrders />
+                  <CustomerOrderDetail />
                 </ProtectedRoute>
               }
             />
