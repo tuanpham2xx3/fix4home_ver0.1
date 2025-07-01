@@ -266,53 +266,40 @@ export default function AdminDashboard() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {/* Popular Services Pie Chart */}
+            {/* Popular Services Placeholder */}
             <Card>
               <CardHeader>
                 <CardTitle>Popular Services</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={popularServicesData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={renderCustomizedLabel}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {popularServicesData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
+                <div className="h-80 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="w-8 h-8 text-primary" />
+                    </div>
+                    <p className="text-muted-foreground">
+                      Chart placeholder - deployment debugging
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Order Status Bar Chart */}
+            {/* Order Status Placeholder */}
             <Card>
               <CardHeader>
                 <CardTitle>Order Status Distribution</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={orderStatusData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="status" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="count" fill="#3b82f6" />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className="h-80 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="w-8 h-8 text-primary" />
+                    </div>
+                    <p className="text-muted-foreground">
+                      Chart placeholder - deployment debugging
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
