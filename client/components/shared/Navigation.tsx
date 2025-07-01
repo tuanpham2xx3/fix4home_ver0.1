@@ -16,42 +16,8 @@ export default function Navigation() {
 
   const navigationLinks = [
     { path: "/", label: "Home" },
-    { path: "/services", label: "Services" },
     { path: "/about", label: "About" },
-    { path: "/contact", label: "Contact" },
   ];
-
-  const legalLinks = [
-    { path: "/privacy", label: "Privacy" },
-    { path: "/terms", label: "Terms" },
-  ];
-
-  // Role-based navigation links
-  const roleBasedLinks = {
-    customer: [
-      { path: "/customer/dashboard", label: "Dashboard" },
-      { path: "/customer/orders", label: "My Orders" },
-      { path: "/customer/profile", label: "Profile" },
-    ],
-    technician: [
-      { path: "/technician/dashboard", label: "Dashboard" },
-      { path: "/technician/jobs", label: "My Jobs" },
-      { path: "/technician/profile", label: "Profile" },
-    ],
-    admin: [
-      { path: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-      { path: "/admin/users", label: "Users", icon: Users },
-      { path: "/admin/technicians", label: "Technicians", icon: Wrench },
-      { path: "/admin/services", label: "Services", icon: Settings },
-      { path: "/admin/orders", label: "Orders", icon: ShoppingCart },
-      { path: "/admin/reports", label: "Reports", icon: FileText },
-    ],
-  };
-
-  const authLinks = isAuthenticated ? [] : [{ path: "/login", label: "Login" }];
-
-  const userLinks =
-    isAuthenticated && userRole ? roleBasedLinks[userRole] || [] : [];
 
   return (
     <nav className="border-b bg-white sticky top-0 z-50 shadow-sm">
