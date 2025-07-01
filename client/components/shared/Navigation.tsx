@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import UserMenu from "./UserMenu";
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,13 +30,13 @@ export default function Navigation() {
   const navigationLinks = [
     { path: "/", label: "Home" },
     { path: "/services", label: "Services" },
-    { path: "/about", label: "About Us" },
+    { path: "/about", label: "About" },
     { path: "/contact", label: "Contact" },
   ];
 
   const legalLinks = [
-    { path: "/privacy", label: "Privacy Policy" },
-    { path: "/terms", label: "Terms of Use" },
+    { path: "/privacy", label: "Privacy" },
+    { path: "/terms", label: "Terms" },
   ];
 
   // Role-based navigation links
@@ -60,32 +61,6 @@ export default function Navigation() {
 
   const userLinks =
     isAuthenticated && userRole ? roleBasedLinks[userRole] || [] : [];
-
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case "admin":
-        return <Shield className="w-4 h-4" />;
-      case "technician":
-        return <Settings className="w-4 h-4" />;
-      case "customer":
-        return <User className="w-4 h-4" />;
-      default:
-        return <User className="w-4 h-4" />;
-    }
-  };
-
-  const getRoleBadgeColor = (role: string) => {
-    switch (role) {
-      case "admin":
-        return "bg-purple-100 text-purple-800 border-purple-200";
-      case "technician":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "customer":
-        return "bg-green-100 text-green-800 border-green-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
 
   return (
     <nav className="border-b bg-white sticky top-0 z-50 shadow-sm">
@@ -122,7 +97,7 @@ export default function Navigation() {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`relative z-10 px-3 py-2 text-sm font-medium transition-colors hover:text-primary cursor-pointer ${
                   isActive(link.path)
                     ? "text-primary border-b-2 border-primary pb-1"
                     : "text-muted-foreground"
@@ -137,25 +112,6 @@ export default function Navigation() {
           <div className="flex items-center justify-end space-x-4">
             {/* Desktop Auth/User Menu */}
             <div className="hidden lg:flex items-center space-x-4">
-              {/* Role-based Links for logged in users */}
-              {userLinks.length > 0 && (
-                <div className="flex items-center space-x-4">
-                  {userLinks.map((link) => (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      className={`text-sm font-medium transition-colors hover:text-primary ${
-                        isActive(link.path)
-                          ? "text-primary border-b-2 border-primary pb-1"
-                          : "text-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-
               {/* Login Link */}
               {authLinks.map((link) => (
                 <Link
@@ -172,32 +128,7 @@ export default function Navigation() {
               ))}
 
               {/* User Menu */}
-              {isAuthenticated && user && (
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                      {getRoleIcon(userRole!)}
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">{user.name}</span>
-                      <Badge
-                        variant="outline"
-                        className={`text-xs ${getRoleBadgeColor(userRole!)}`}
-                      >
-                        {userRole}
-                      </Badge>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={logout}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </Button>
-                </div>
-              )}
+              {isAuthenticated && user && <UserMenu />}
             </div>
 
             {/* Mobile Login Button (when not authenticated) */}
@@ -210,10 +141,10 @@ export default function Navigation() {
               </Link>
             )}
 
-            {/* Mobile User Icon (when authenticated) */}
+            {/* Mobile User Menu (when authenticated) */}
             {isAuthenticated && user && (
-              <div className="lg:hidden w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                {getRoleIcon(userRole!)}
+              <div className="lg:hidden">
+                <UserMenu />
               </div>
             )}
 
@@ -241,13 +172,25 @@ export default function Navigation() {
                 <div className="border-b pb-4 mb-4">
                   <div className="flex items-center space-x-3 mb-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                      {getRoleIcon(userRole!)}
+                      {userRole === "admin" ? (
+                        <Shield className="w-4 h-4 text-white" />
+                      ) : userRole === "technician" ? (
+                        <Settings className="w-4 h-4 text-white" />
+                      ) : (
+                        <User className="w-4 h-4 text-white" />
+                      )}
                     </div>
                     <div>
                       <p className="font-medium">{user.name}</p>
                       <Badge
                         variant="outline"
-                        className={`text-xs ${getRoleBadgeColor(userRole!)}`}
+                        className={`text-xs ${
+                          userRole === "admin"
+                            ? "bg-purple-100 text-purple-800 border-purple-200"
+                            : userRole === "technician"
+                              ? "bg-blue-100 text-blue-800 border-blue-200"
+                              : "bg-green-100 text-green-800 border-green-200"
+                        }`}
                       >
                         {userRole}
                       </Badge>

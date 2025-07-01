@@ -366,10 +366,6 @@ export default function CustomerDashboard() {
                   Reviews
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" onClick={logout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
             </div>
           </div>
 
@@ -479,57 +475,6 @@ export default function CustomerDashboard() {
               </>
             )}
           </div>
-
-          {/* Shortcut Buttons */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Wrench className="w-5 h-5 text-primary" />
-                Quick Actions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Button asChild size="lg" className="h-auto p-6 flex-col gap-2">
-                  <Link to="/services">
-                    <Plus className="w-8 h-8" />
-                    <span className="font-semibold">Book New Service</span>
-                    <span className="text-xs opacity-90">
-                      Browse available services
-                    </span>
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="h-auto p-6 flex-col gap-2"
-                >
-                  <Link to="/customer/orders">
-                    <Eye className="w-8 h-8" />
-                    <span className="font-semibold">View All Orders</span>
-                    <span className="text-xs opacity-70">
-                      Track order status
-                    </span>
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="h-auto p-6 flex-col gap-2"
-                >
-                  <Link to="/customer/profile">
-                    <Settings className="w-8 h-8" />
-                    <span className="font-semibold">Edit Profile</span>
-                    <span className="text-xs opacity-70">
-                      Manage account settings
-                    </span>
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Recent Orders */}
