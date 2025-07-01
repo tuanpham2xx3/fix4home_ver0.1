@@ -237,7 +237,9 @@ export default function BookService() {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Store booking data in localStorage for next step
-        localStorage.setItem("bookingData", JSON.stringify(bookingData));
+        if (typeof window !== "undefined") {
+          localStorage.setItem("bookingData", JSON.stringify(bookingData));
+        }
 
         navigate(`/booking/technician/${service?.id}`);
       } catch (error) {

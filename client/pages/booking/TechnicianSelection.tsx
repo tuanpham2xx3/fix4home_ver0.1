@@ -260,15 +260,17 @@ export default function TechnicianSelection() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Store technician selection
-      const bookingData = JSON.parse(
-        localStorage.getItem("bookingData") || "{}",
-      );
-      const updatedBookingData = {
-        ...bookingData,
-        technicianId: technician.id,
-        estimatedCost: technician.hourlyRate * 2, // Assuming 2 hours average
-      };
-      localStorage.setItem("bookingData", JSON.stringify(updatedBookingData));
+      if (typeof window !== "undefined") {
+        const bookingData = JSON.parse(
+          localStorage.getItem("bookingData") || "{}",
+        );
+        const updatedBookingData = {
+          ...bookingData,
+          technicianId: technician.id,
+          estimatedCost: technician.hourlyRate * 2, // Assuming 2 hours average
+        };
+        localStorage.setItem("bookingData", JSON.stringify(updatedBookingData));
+      }
 
       navigate("/booking/confirm");
     } catch (error) {
