@@ -54,14 +54,16 @@ const queryClient = new QueryClient();
 const basename =
   import.meta.env.MODE === "production" ? "/fix4home_ver0.1" : "";
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter basename={basename}>
-        <AuthProvider>
-          <Routes>
+const App = () => {
+  return (
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <BrowserRouter basename={basename}>
+            <AuthProvider>
+              <Toaster />
+              <Sonner />
+              <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/home" element={<Index />} />
