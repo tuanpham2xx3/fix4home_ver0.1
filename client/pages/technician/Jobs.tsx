@@ -252,28 +252,82 @@ export default function TechnicianJobs() {
 
   const filterJobsByTab = (jobs: any[], tab: string) => {
     switch (tab) {
-      case "available":
-        return jobs.filter((job) => job.status === "available");
+      case "pending":
+        return jobs.filter((job) => job.status === "pending");
       case "scheduled":
         return jobs.filter((job) => job.status === "scheduled");
-      case "active":
+      case "in-progress":
         return jobs.filter((job) => job.status === "in-progress");
       case "completed":
         return jobs.filter((job) => job.status === "completed");
+      case "cancelled":
+        return jobs.filter((job) => job.status === "cancelled");
       default:
         return jobs;
     }
   };
 
-  const filteredJobs = filterJobsByTab(jobs, activeTab).filter((job) => {
-    const matchesSearch =
-      job.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.address.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" || job.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const sortJobs = (jobs: any[]) => {
+    return [...jobs].sort((a, b) => {
+      let aValue, bValue;
+
+      switch (sortBy) {
+        case "date":
+          aValue = new Date(`${a.date} ${a.time}`);
+          bValue = new Date(`${b.date} ${b.time}`);
+          break;
+        case "payment":
+          aValue = a.payment;
+          bValue = b.payment;
+          break;
+        case "customer":
+          aValue = a.customer.toLowerCase();
+          bValue = b.customer.toLowerCase();
+          break;
+        case "priority":
+          const priorityOrder = { high: 3, medium: 2, low: 1 };
+          aValue = priorityOrder[a.priority as keyof typeof priorityOrder];
+          bValue = priorityOrder[b.priority as keyof typeof priorityOrder];
+          break;
+        default:
+          aValue = a.id;
+          bValue = b.id;
+      }
+
+      if (sortOrder === "asc") {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      } else {
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      }
+    });
+  };
+
+  const filteredJobs = sortJobs(
+    filterJobsByTab(allJobs, activeTab).filter((job) => {
+      const matchesSearch =
+        job.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.address.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" || job.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    }),
+  );
+
+  const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentJobs = filteredJobs.slice(startIndex, endIndex);
+
+  const handleSort = (field: string) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(field);
+      setSortOrder("asc");
+    }
+  };
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
