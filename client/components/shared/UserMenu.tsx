@@ -174,8 +174,8 @@ export default function UserMenu() {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-80 bg-background/95 backdrop-blur-xl border-r border-border/50 shadow-2xl z-50 transform transition-all duration-300 ease-out rounded-r-2xl ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 right-0 h-full w-80 bg-background/95 backdrop-blur-xl border-l border-border/50 shadow-2xl z-50 transform transition-all duration-300 ease-out rounded-l-2xl ${
+          sidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full relative">
