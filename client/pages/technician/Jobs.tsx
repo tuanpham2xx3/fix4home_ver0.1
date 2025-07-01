@@ -554,186 +554,448 @@ export default function TechnicianJobs() {
             </CardContent>
           </Card>
 
-          {/* Jobs List */}
-          <div className="space-y-4">
-            {filteredJobs.length === 0 ? (
-              <Card>
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Search className="w-8 h-8 text-muted-foreground" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">No jobs found</h3>
-                  <p className="text-muted-foreground">
-                    {searchTerm || statusFilter !== "all"
-                      ? "Try adjusting your search or filters"
-                      : "No jobs available at the moment"}
-                  </p>
-                </CardContent>
-              </Card>
-            ) : (
-              filteredJobs.map((job) => (
-                <Card
-                  key={job.id}
-                  className="hover:shadow-md transition-shadow"
-                >
-                  <CardContent className="p-6">
-                    <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-3">
-                          {getStatusIcon(job.status)}
-                          <h3 className="text-lg font-semibold">
-                            {job.service}
-                          </h3>
-                          <Badge
-                            variant="outline"
-                            className={getStatusColor(job.status)}
-                          >
-                            {job.status}
-                          </Badge>
-                          <Badge
-                            variant="outline"
-                            className={getPriorityColor(job.priority)}
-                          >
-                            {job.priority} priority
-                          </Badge>
-                        </div>
+          {/* Jobs Display */}
+          {currentJobs.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
+                  {searchTerm || statusFilter !== "all" ? (
+                    <Search className="w-10 h-10 text-muted-foreground" />
+                  ) : (
+                    <Briefcase className="w-10 h-10 text-muted-foreground" />
+                  )}
+                </div>
+                <h3 className="text-xl font-semibold mb-3">
+                  {searchTerm || statusFilter !== "all"
+                    ? "No jobs found"
+                    : "No jobs available"}
+                </h3>
+                <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                  {searchTerm || statusFilter !== "all"
+                    ? "Try adjusting your search criteria or filters to find what you're looking for."
+                    : "You don't have any jobs at the moment. New opportunities will appear here when available."}
+                </p>
+                <div className="flex justify-center gap-3">
+                  {(searchTerm || statusFilter !== "all") && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setSearchTerm("");
+                        setStatusFilter("all");
+                        setActiveTab("all");
+                      }}
+                    >
+                      Clear Filters
+                    </Button>
+                  )}
+                  <Button asChild>
+                    <a href="/technician/dashboard">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Back to Dashboard
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {viewMode === "cards" ? (
+                <div className="space-y-4">
+                  {currentJobs.map((job) => (
+                    <Card
+                      key={job.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-3">
+                              {getStatusIcon(job.status)}
+                              <h3 className="text-lg font-semibold">
+                                {job.service}
+                              </h3>
+                              <Badge
+                                variant="outline"
+                                className={getStatusColor(job.status)}
+                              >
+                                {job.status.replace("-", " ")}
+                              </Badge>
+                              <Badge
+                                variant="outline"
+                                className={getPriorityColor(job.priority)}
+                              >
+                                {job.priority} priority
+                              </Badge>
+                            </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium">Job ID:</span>
-                              <span>{job.id}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium">Customer:</span>
-                              <span>{job.customer}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Phone className="w-4 h-4" />
-                              <span>{job.customerPhone}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <MapPin className="w-4 h-4" />
-                              <span>{job.address}</span>
-                            </div>
-                          </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
+                              <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium">Job ID:</span>
+                                  <span className="font-mono">{job.id}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium">Customer:</span>
+                                  <span>{job.customer}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Phone className="w-4 h-4" />
+                                  <span>{job.customerPhone}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <MapPin className="w-4 h-4" />
+                                  <span>{job.address}</span>
+                                  <span className="text-xs bg-muted px-2 py-1 rounded">
+                                    {job.distance}
+                                  </span>
+                                </div>
+                              </div>
 
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4" />
-                              <span>
-                                {job.date} at {job.time}
-                              </span>
+                              <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="w-4 h-4" />
+                                  <span>
+                                    {job.date} at {job.time}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Clock className="w-4 h-4" />
+                                  <span>Est. {job.estimatedDuration}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <DollarSign className="w-4 h-4" />
+                                  <span className="font-medium text-green-600">
+                                    ${job.payment}
+                                  </span>
+                                </div>
+                                {job.startedAt && (
+                                  <div className="flex items-center gap-2">
+                                    <Play className="w-4 h-4" />
+                                    <span>Started: {job.startedAt}</span>
+                                  </div>
+                                )}
+                                {job.completedAt && (
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="w-4 h-4" />
+                                    <span>Completed: {job.completedAt}</span>
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4" />
-                              <span>Est. {job.estimatedDuration}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <DollarSign className="w-4 h-4" />
-                              <span className="font-medium text-green-600">
-                                {job.payment}
-                              </span>
-                            </div>
-                            {job.startedAt && (
-                              <div className="flex items-center gap-2">
-                                <Play className="w-4 h-4" />
-                                <span>Started: {job.startedAt}</span>
+
+                            <p className="mt-3 text-sm text-foreground">
+                              {job.description}
+                            </p>
+
+                            {job.rating && (
+                              <div className="flex items-center gap-2 mt-3">
+                                <span className="text-sm font-medium">
+                                  Customer Rating:
+                                </span>
+                                <div className="flex">
+                                  {renderStars(job.rating)}
+                                </div>
+                                <span className="text-sm text-muted-foreground">
+                                  ({job.rating}/5)
+                                </span>
                               </div>
                             )}
-                            {job.completedAt && (
-                              <div className="flex items-center gap-2">
-                                <CheckCircle className="w-4 h-4" />
-                                <span>Completed: {job.completedAt}</span>
+
+                            {job.cancelledReason && (
+                              <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                                <p className="text-sm text-red-800 dark:text-red-200">
+                                  <strong>Cancelled:</strong>{" "}
+                                  {job.cancelledReason}
+                                </p>
                               </div>
                             )}
                           </div>
-                        </div>
 
-                        <p className="mt-3 text-sm">{job.description}</p>
-
-                        {job.rating && (
-                          <div className="flex items-center gap-2 mt-3">
-                            <span className="text-sm font-medium">
-                              Customer Rating:
-                            </span>
-                            <div className="flex">
-                              {renderStars(job.rating)}
+                          <div className="flex flex-col lg:items-end gap-3">
+                            <div className="text-right">
+                              <p className="text-2xl font-bold text-primary">
+                                ${job.payment}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {job.estimatedDuration}
+                              </p>
                             </div>
-                            <span className="text-sm text-muted-foreground">
-                              ({job.rating}/5)
-                            </span>
+
+                            <div className="flex flex-col sm:flex-row lg:flex-col gap-2">
+                              {job.status === "pending" && (
+                                <Button
+                                  onClick={() => handleAcceptJob(job.id)}
+                                  size="sm"
+                                >
+                                  Accept Job
+                                </Button>
+                              )}
+
+                              {job.status === "scheduled" && (
+                                <>
+                                  <Button
+                                    onClick={() => handleStartJob(job.id)}
+                                    size="sm"
+                                  >
+                                    <Play className="w-4 h-4 mr-2" />
+                                    Start Job
+                                  </Button>
+                                  <Button variant="outline" size="sm">
+                                    <Navigation className="w-4 h-4 mr-2" />
+                                    Navigate
+                                  </Button>
+                                </>
+                              )}
+
+                              {job.status === "in-progress" && (
+                                <>
+                                  <Button
+                                    onClick={() => handleCompleteJob(job.id)}
+                                    size="sm"
+                                  >
+                                    <CheckCircle className="w-4 h-4 mr-2" />
+                                    Complete
+                                  </Button>
+                                  <Button variant="outline" size="sm">
+                                    <MessageSquare className="w-4 h-4 mr-2" />
+                                    Chat
+                                  </Button>
+                                </>
+                              )}
+
+                              {(job.status === "scheduled" ||
+                                job.status === "in-progress") && (
+                                <Button variant="outline" size="sm">
+                                  <Phone className="w-4 h-4 mr-2" />
+                                  Call Customer
+                                </Button>
+                              )}
+
+                              <Button variant="outline" size="sm">
+                                <Eye className="w-4 h-4 mr-2" />
+                                View Details
+                              </Button>
+                            </div>
                           </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col lg:items-end gap-3">
-                        <div className="text-right">
-                          <p className="text-2xl font-bold text-primary">
-                            {job.payment}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {job.estimatedDuration}
-                          </p>
                         </div>
-
-                        <div className="flex flex-col sm:flex-row lg:flex-col gap-2">
-                          {job.status === "available" && (
-                            <Button
-                              onClick={() => handleAcceptJob(job.id)}
-                              size="sm"
-                            >
-                              Accept Job
-                            </Button>
-                          )}
-
-                          {job.status === "scheduled" && (
-                            <>
-                              <Button
-                                onClick={() => handleStartJob(job.id)}
-                                size="sm"
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Eye className="w-5 h-5" />
+                      Jobs Table View
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead
+                            className="cursor-pointer hover:bg-muted/50"
+                            onClick={() => handleSort("id")}
+                          >
+                            Job ID{" "}
+                            {sortBy === "id" &&
+                              (sortOrder === "asc" ? (
+                                <SortAsc className="w-4 h-4 inline" />
+                              ) : (
+                                <SortDesc className="w-4 h-4 inline" />
+                              ))}
+                          </TableHead>
+                          <TableHead>Service</TableHead>
+                          <TableHead
+                            className="cursor-pointer hover:bg-muted/50"
+                            onClick={() => handleSort("customer")}
+                          >
+                            Customer{" "}
+                            {sortBy === "customer" &&
+                              (sortOrder === "asc" ? (
+                                <SortAsc className="w-4 h-4 inline" />
+                              ) : (
+                                <SortDesc className="w-4 h-4 inline" />
+                              ))}
+                          </TableHead>
+                          <TableHead
+                            className="cursor-pointer hover:bg-muted/50"
+                            onClick={() => handleSort("date")}
+                          >
+                            Date/Time{" "}
+                            {sortBy === "date" &&
+                              (sortOrder === "asc" ? (
+                                <SortAsc className="w-4 h-4 inline" />
+                              ) : (
+                                <SortDesc className="w-4 h-4 inline" />
+                              ))}
+                          </TableHead>
+                          <TableHead>Address</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead
+                            className="cursor-pointer hover:bg-muted/50"
+                            onClick={() => handleSort("payment")}
+                          >
+                            Payment{" "}
+                            {sortBy === "payment" &&
+                              (sortOrder === "asc" ? (
+                                <SortAsc className="w-4 h-4 inline" />
+                              ) : (
+                                <SortDesc className="w-4 h-4 inline" />
+                              ))}
+                          </TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {currentJobs.map((job) => (
+                          <TableRow key={job.id} className="hover:bg-muted/50">
+                            <TableCell className="font-mono font-medium">
+                              {job.id}
+                            </TableCell>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium">{job.service}</p>
+                                <Badge
+                                  variant="outline"
+                                  className={`${getPriorityColor(job.priority)} text-xs`}
+                                >
+                                  {job.priority}
+                                </Badge>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium">{job.customer}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {job.customerPhone}
+                                </p>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium">{job.date}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {job.time}
+                                </p>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div>
+                                <p className="text-sm">{job.address}</p>
+                                <span className="text-xs bg-muted px-2 py-1 rounded">
+                                  {job.distance}
+                                </span>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant="outline"
+                                className={getStatusColor(job.status)}
                               >
-                                <Play className="w-4 h-4 mr-2" />
-                                Start Job
-                              </Button>
+                                {job.status.replace("-", " ")}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="font-bold text-green-600">
+                              ${job.payment}
+                            </TableCell>
+                            <TableCell>
                               <Button variant="outline" size="sm">
-                                <Navigation className="w-4 h-4 mr-2" />
-                                Navigate
+                                <Eye className="w-4 h-4 mr-2" />
+                                Details
                               </Button>
-                            </>
-                          )}
-
-                          {job.status === "in-progress" && (
-                            <>
-                              <Button
-                                onClick={() => handleCompleteJob(job.id)}
-                                size="sm"
-                              >
-                                <Square className="w-4 h-4 mr-2" />
-                                Complete
-                              </Button>
-                              <Button variant="outline" size="sm">
-                                <MessageSquare className="w-4 h-4 mr-2" />
-                                Chat
-                              </Button>
-                            </>
-                          )}
-
-                          {(job.status === "scheduled" ||
-                            job.status === "in-progress") && (
-                            <Button variant="outline" size="sm">
-                              <Phone className="w-4 h-4 mr-2" />
-                              Call Customer
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </CardContent>
                 </Card>
-              ))
-            )}
-          </div>
+              )}
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-8">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (currentPage > 1)
+                              setCurrentPage(currentPage - 1);
+                          }}
+                          className={
+                            currentPage === 1
+                              ? "pointer-events-none opacity-50"
+                              : ""
+                          }
+                        />
+                      </PaginationItem>
+
+                      {[...Array(totalPages)].map((_, i) => {
+                        const page = i + 1;
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                        ) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationLink
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setCurrentPage(page);
+                                }}
+                                isActive={currentPage === page}
+                              >
+                                {page}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        } else if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                        ) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationEllipsis />
+                            </PaginationItem>
+                          );
+                        }
+                        return null;
+                      })}
+
+                      <PaginationItem>
+                        <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (currentPage < totalPages)
+                              setCurrentPage(currentPage + 1);
+                          }}
+                          className={
+                            currentPage === totalPages
+                              ? "pointer-events-none opacity-50"
+                              : ""
+                          }
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+
+                  <div className="text-center mt-4 text-sm text-muted-foreground">
+                    Showing {startIndex + 1}-
+                    {Math.min(endIndex, filteredJobs.length)} of{" "}
+                    {filteredJobs.length} jobs
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </Layout>
