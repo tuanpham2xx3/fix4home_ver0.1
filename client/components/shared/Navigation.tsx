@@ -90,8 +90,8 @@ export default function Navigation() {
   return (
     <nav className="border-b bg-white sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
+        <div className="flex items-center justify-between lg:grid lg:grid-cols-3 lg:gap-8">
+          {/* Logo - Left */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
               <Wrench className="h-6 w-6 text-white" />
@@ -99,8 +99,8 @@ export default function Navigation() {
             <span className="text-2xl font-bold text-foreground">FIX4HOME</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6">
+          {/* Desktop Navigation - Center */}
+          <div className="hidden lg:flex items-center justify-center space-x-8">
             {/* Main Navigation */}
             {navigationLinks.map((link) => (
               <Link
@@ -115,26 +115,6 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
-
-            {/* Role-based Links */}
-            {userLinks.length > 0 && (
-              <>
-                <div className="h-6 w-px bg-border mx-2" />
-                {userLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`font-medium transition-colors hover:text-primary ${
-                      isActive(link.path)
-                        ? "text-primary border-b-2 border-primary pb-1"
-                        : "text-foreground"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </>
-            )}
 
             {/* Legal Links */}
             <div className="h-6 w-px bg-border mx-2" />
@@ -151,70 +131,105 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
-
-            {/* Auth Links */}
-            <div className="h-6 w-px bg-border mx-2" />
-            {authLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`font-medium transition-colors hover:text-primary ${
-                  isActive(link.path)
-                    ? "text-primary border-b-2 border-primary pb-1"
-                    : "text-foreground"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-
-            {/* User Menu */}
-            {isAuthenticated && user && (
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                    {getRoleIcon(userRole!)}
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">{user.name}</span>
-                    <Badge
-                      variant="outline"
-                      className={`text-xs ${getRoleBadgeColor(userRole!)}`}
-                    >
-                      {userRole}
-                    </Badge>
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={logout}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <LogOut className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle mobile menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          {/* Right Section - Auth/User */}
+          <div className="flex items-center justify-end space-x-4">
+            {/* Desktop Auth/User Menu */}
+            <div className="hidden lg:flex items-center space-x-4">
+              {/* Role-based Links for logged in users */}
+              {userLinks.length > 0 && (
+                <div className="flex items-center space-x-4">
+                  {userLinks.map((link) => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className={`text-sm font-medium transition-colors hover:text-primary ${
+                        isActive(link.path)
+                          ? "text-primary border-b-2 border-primary pb-1"
+                          : "text-foreground"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
 
-          {/* Hotline Button */}
-          <Button className="hidden lg:flex bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
-            <Phone className="w-4 h-4 mr-2" />
-            Hotline: 1900-1234
-          </Button>
+              {/* Login Link */}
+              {authLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`font-medium transition-colors hover:text-primary px-4 py-2 rounded-md border border-primary ${
+                    isActive(link.path)
+                      ? "bg-primary text-primary-foreground"
+                      : "text-primary hover:bg-primary hover:text-primary-foreground"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+
+              {/* User Menu */}
+              {isAuthenticated && user && (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+                      {getRoleIcon(userRole!)}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{user.name}</span>
+                      <Badge
+                        variant="outline"
+                        className={`text-xs ${getRoleBadgeColor(userRole!)}`}
+                      >
+                        {userRole}
+                      </Badge>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={logout}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Login Button (when not authenticated) */}
+            {!isAuthenticated && authLinks.length > 0 && (
+              <Link
+                to="/login"
+                className="lg:hidden text-sm font-medium text-primary hover:text-primary/80"
+              >
+                Login
+              </Link>
+            )}
+
+            {/* Mobile User Icon (when authenticated) */}
+            {isAuthenticated && user && (
+              <div className="lg:hidden w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+                {getRoleIcon(userRole!)}
+              </div>
+            )}
+
+            {/* Mobile Menu Button */}
+            <button
+              className="lg:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle mobile menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -331,12 +346,6 @@ export default function Navigation() {
                   </Button>
                 </div>
               )}
-
-              {/* Mobile Hotline Button */}
-              <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold w-full mt-4">
-                <Phone className="w-4 h-4 mr-2" />
-                Hotline: 1900-1234
-              </Button>
             </div>
           </div>
         )}
