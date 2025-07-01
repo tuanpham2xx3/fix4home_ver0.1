@@ -180,7 +180,7 @@ export default function UserMenu() {
       >
         <div className="flex flex-col h-full relative">
           {/* Gradient Background Accent */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-tr-2xl" />
+          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-bl from-primary/5 to-secondary/5 rounded-tl-2xl" />
 
           {/* Header */}
           <div className="relative flex items-center justify-between p-6 pb-4">
