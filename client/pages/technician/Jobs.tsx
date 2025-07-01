@@ -493,35 +493,62 @@ export default function TechnicianJobs() {
             </CardContent>
           </Card>
 
-          {/* Filters */}
+          {/* Search and Filters */}
           <Card className="mb-6">
             <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-col lg:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
-                      placeholder="Search jobs by service, customer, ID, or address..."
+                      placeholder="Search by customer name, address, service, or job ID..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>
                 </div>
-                <div className="w-full md:w-48">
+                <div className="flex gap-2">
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-48">
                       <Filter className="w-4 h-4 mr-2" />
-                      <SelectValue placeholder="Filter by status" />
+                      <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Status</SelectItem>
-                      <SelectItem value="available">Available</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="scheduled">Scheduled</SelectItem>
                       <SelectItem value="in-progress">In Progress</SelectItem>
                       <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
                     </SelectContent>
                   </Select>
+
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="date">Date</SelectItem>
+                      <SelectItem value="payment">Payment</SelectItem>
+                      <SelectItem value="customer">Customer</SelectItem>
+                      <SelectItem value="priority">Priority</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() =>
+                      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                    }
+                  >
+                    {sortOrder === "asc" ? (
+                      <SortAsc className="w-4 h-4" />
+                    ) : (
+                      <SortDesc className="w-4 h-4" />
+                    )}
+                  </Button>
                 </div>
               </div>
             </CardContent>
