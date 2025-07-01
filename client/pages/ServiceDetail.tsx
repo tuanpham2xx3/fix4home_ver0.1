@@ -662,12 +662,23 @@ export default function ServiceDetail() {
 // Loading Skeleton Component
 function ServiceDetailSkeleton() {
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b bg-white p-4">
-        <div className="container mx-auto">
-          <Skeleton className="h-8 w-32" />
+    <Layout>
+      <div className="relative h-[300px] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/60 to-secondary/70" />
+        <div className="absolute inset-0 flex items-center">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <Skeleton className="h-8 w-32 mx-auto mb-4 bg-white/20" />
+              <Skeleton className="h-12 w-3/4 mx-auto mb-4 bg-white/20" />
+              <Skeleton className="h-6 w-1/2 mx-auto mb-8 bg-white/20" />
+              <div className="flex gap-4 justify-center">
+                <Skeleton className="h-14 w-32 bg-white/20" />
+                <Skeleton className="h-14 w-32 bg-white/20" />
+              </div>
+            </div>
+          </div>
         </div>
-      </nav>
+      </div>
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
