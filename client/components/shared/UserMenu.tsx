@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   User,
   LogOut,
@@ -9,20 +10,17 @@ import {
   Wrench,
   BarChart3,
   Users,
+  X,
+  Calendar,
+  Star,
+  TrendingUp,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 export default function UserMenu() {
   const { user, userRole, logout } = useAuth();
