@@ -54,9 +54,8 @@ import TechnicianReviews from "./pages/technician/Reviews";
 
 const queryClient = new QueryClient();
 
-// Get basename from environment or use default for GitHub Pages
-const basename =
-  import.meta.env.MODE === "production" ? "/fix4home_ver0.1" : "";
+// Temporarily simplified basename for deployment debugging
+const basename = "";
 
 const App = () => {
   return (
