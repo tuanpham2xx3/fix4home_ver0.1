@@ -18,7 +18,7 @@
     "build:gh-pages": "vite build --mode production",
     "preview": "vite preview",
     "deploy": "npm run build:gh-pages && gh-pages -d dist",
-    "start": "node dist/server/node-build.mjs",
+    "start": "npm run preview",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
     "typecheck": "tsc"
