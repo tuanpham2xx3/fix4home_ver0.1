@@ -504,58 +504,82 @@ export default function TechnicianDashboard() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Today's Jobs */}
+            {/* Recent Jobs */}
             <div className="lg:col-span-2">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle>Today's Jobs</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="w-5 h-5" />
+                    Recent Jobs
+                  </CardTitle>
                   <Button asChild variant="outline" size="sm">
                     <Link to="/technician/jobs">
                       <Eye className="w-4 h-4 mr-2" />
-                      View All
+                      View All Jobs
                     </Link>
                   </Button>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {todayJobs.map((job) => (
-                      <div
-                        key={job.id}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                      >
-                        <div className="flex items-center space-x-4">
-                          {getStatusIcon(job.status)}
-                          <div>
-                            <div className="flex items-center gap-2 mb-1">
-                              <p className="font-medium">{job.service}</p>
-                              <Badge
-                                variant="outline"
-                                className={getPriorityColor(job.priority)}
-                              >
-                                {job.priority}
-                              </Badge>
+                  {recentJobs.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Briefcase className="w-8 h-8 text-muted-foreground" />
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2">
+                        No Jobs Yet
+                      </h3>
+                      <p className="text-muted-foreground mb-4">
+                        You don't have any jobs assigned yet. Check back later
+                        for new opportunities.
+                      </p>
+                      <Button asChild>
+                        <Link to="/technician/jobs?filter=available">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Browse Available Jobs
+                        </Link>
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {recentJobs.slice(0, 5).map((job) => (
+                        <div
+                          key={job.id}
+                          className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="flex items-center space-x-4">
+                            {getStatusIcon(job.status)}
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <p className="font-medium">{job.service}</p>
+                                <Badge
+                                  variant="outline"
+                                  className={getPriorityColor(job.priority)}
+                                >
+                                  {job.priority}
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground">
+                                {job.customer} • {job.date} at {job.time}
+                              </p>
+                              <p className="text-sm text-muted-foreground flex items-center gap-1">
+                                <MapPin className="w-3 h-3" />
+                                {job.address}
+                              </p>
                             </div>
-                            <p className="text-sm text-muted-foreground">
-                              {job.customer} • {job.time}
-                            </p>
-                            <p className="text-sm text-muted-foreground flex items-center gap-1">
-                              <MapPin className="w-3 h-3" />
-                              {job.address}
-                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium text-lg">{job.payment}</p>
+                            <Badge
+                              variant="outline"
+                              className={getStatusColor(job.status)}
+                            >
+                              {job.status.replace("-", " ")}
+                            </Badge>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-medium text-lg">{job.payment}</p>
-                          <Badge
-                            variant="outline"
-                            className={getStatusColor(job.status)}
-                          >
-                            {job.status}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
