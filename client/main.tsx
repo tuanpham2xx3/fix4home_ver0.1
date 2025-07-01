@@ -218,7 +218,9 @@ const App = () => {
                   path="/admin/dashboard"
                   element={
                     <ProtectedRoute allowedRoles={["admin"]}>
-                      <AdminDashboard />
+                      <React.Suspense fallback={<div>Loading...</div>}>
+                        <AdminDashboard />
+                      </React.Suspense>
                     </ProtectedRoute>
                   }
                 />
@@ -226,7 +228,9 @@ const App = () => {
                   path="/admin/users"
                   element={
                     <ProtectedRoute allowedRoles={["admin"]}>
-                      <AdminUsers />
+                      <React.Suspense fallback={<div>Loading...</div>}>
+                        <AdminUsers />
+                      </React.Suspense>
                     </ProtectedRoute>
                   }
                 />
@@ -234,7 +238,9 @@ const App = () => {
                   path="/admin/technicians"
                   element={
                     <ProtectedRoute allowedRoles={["admin"]}>
-                      <AdminTechnicians />
+                      <React.Suspense fallback={<div>Loading...</div>}>
+                        <AdminTechnicians />
+                      </React.Suspense>
                     </ProtectedRoute>
                   }
                 />
@@ -242,7 +248,9 @@ const App = () => {
                   path="/admin/orders"
                   element={
                     <ProtectedRoute allowedRoles={["admin"]}>
-                      <AdminOrders />
+                      <React.Suspense fallback={<div>Loading...</div>}>
+                        <AdminOrders />
+                      </React.Suspense>
                     </ProtectedRoute>
                   }
                 />
@@ -250,7 +258,9 @@ const App = () => {
                   path="/admin/services"
                   element={
                     <ProtectedRoute allowedRoles={["admin"]}>
-                      <AdminServices />
+                      <React.Suspense fallback={<div>Loading...</div>}>
+                        <AdminServices />
+                      </React.Suspense>
                     </ProtectedRoute>
                   }
                 />
@@ -258,7 +268,9 @@ const App = () => {
                   path="/admin/reports"
                   element={
                     <ProtectedRoute allowedRoles={["admin"]}>
-                      <AdminReports />
+                      <React.Suspense fallback={<div>Loading...</div>}>
+                        <AdminReports />
+                      </React.Suspense>
                     </ProtectedRoute>
                   }
                 />
