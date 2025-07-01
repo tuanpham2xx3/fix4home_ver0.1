@@ -131,13 +131,28 @@ export default function UserMenu() {
           ...baseItems,
           {
             icon: <Users className="w-4 h-4" />,
-            label: "Manage Users",
+            label: "Users",
             href: "/admin/users",
           },
           {
-            icon: <BarChart3 className="w-4 h-4" />,
-            label: "Analytics",
-            href: "/admin/analytics",
+            icon: <Wrench className="w-4 h-4" />,
+            label: "Technicians",
+            href: "/admin/technicians",
+          },
+          {
+            icon: <Settings className="w-4 h-4" />,
+            label: "Services",
+            href: "/admin/services",
+          },
+          {
+            icon: <ShoppingCart className="w-4 h-4" />,
+            label: "Orders",
+            href: "/admin/orders",
+          },
+          {
+            icon: <FileText className="w-4 h-4" />,
+            label: "Reports",
+            href: "/admin/reports",
           },
         ];
       default:
