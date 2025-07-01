@@ -246,6 +246,22 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/admin/services"
+                  element={
+                    <ProtectedRoute allowedRoles={["admin"]}>
+                      <AdminServices />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/reports"
+                  element={
+                    <ProtectedRoute allowedRoles={["admin"]}>
+                      <AdminReports />
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* Catch-all route - must be last */}
                 <Route path="*" element={<NotFound />} />
