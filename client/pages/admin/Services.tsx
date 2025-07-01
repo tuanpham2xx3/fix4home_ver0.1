@@ -138,7 +138,7 @@ export default function AdminServices() {
     name: "",
     description: "",
     price: "",
-    status: "draft",
+    status: "draft" as "active" | "inactive" | "draft",
     category: "",
     duration: "",
     image: "/placeholder.svg",
