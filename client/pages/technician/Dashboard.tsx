@@ -388,70 +388,119 @@ export default function TechnicianDashboard() {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card className="hover:shadow-lg transition-all duration-200">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">
-                      Today's Jobs
+                    <p className="text-sm text-muted-foreground">Total Jobs</p>
+                    <p className="text-2xl font-bold">
+                      {dashboardStats.totalJobs}
                     </p>
-                    <p className="text-2xl font-bold">3</p>
+                    <p className="text-xs text-green-600 mt-1">
+                      +12 this month
+                    </p>
                   </div>
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <Calendar className="w-6 h-6 text-orange-600" />
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
+                    <Briefcase className="w-6 h-6 text-blue-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="hover:shadow-lg transition-all duration-200">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">
-                      Completed This Week
+                      Jobs in Progress
                     </p>
-                    <p className="text-2xl font-bold">12</p>
+                    <p className="text-2xl font-bold">
+                      {dashboardStats.jobsInProgress}
+                    </p>
+                    <p className="text-xs text-orange-600 mt-1">
+                      Currently active
+                    </p>
                   </div>
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/20 rounded-lg flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-orange-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="hover:shadow-lg transition-all duration-200">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Upcoming Jobs
+                    </p>
+                    <p className="text-2xl font-bold">
+                      {dashboardStats.upcomingJobs}
+                    </p>
+                    <p className="text-xs text-blue-600 mt-1">Next 7 days</p>
+                  </div>
+                  <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
+                    <Calendar className="w-6 h-6 text-purple-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-all duration-200">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">
                       Weekly Earnings
                     </p>
-                    <p className="text-2xl font-bold">$1,840</p>
-                  </div>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-blue-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      Average Rating
+                    <p className="text-2xl font-bold">
+                      ${dashboardStats.weeklyEarnings.toLocaleString()}
                     </p>
-                    <p className="text-2xl font-bold">4.8</p>
+                    <p className="text-xs text-green-600 mt-1">
+                      +18% vs last week
+                    </p>
                   </div>
-                  <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <Star className="w-6 h-6 text-yellow-600" />
+                  <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
+                    <DollarSign className="w-6 h-6 text-green-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Shortcut Buttons */}
+          <div className="mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Button asChild size="lg" className="h-16">
+                <Link
+                  to="/technician/calendar"
+                  className="flex flex-col items-center gap-2"
+                >
+                  <CalendarDays className="w-6 h-6" />
+                  <span>View Today's Calendar</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-16">
+                <Link
+                  to="/technician/jobs?filter=available"
+                  className="flex flex-col items-center gap-2"
+                >
+                  <Plus className="w-6 h-6" />
+                  <span>Accept New Job</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-16">
+                <Link
+                  to="/technician/profile"
+                  className="flex flex-col items-center gap-2"
+                >
+                  <User className="w-6 h-6" />
+                  <span>Edit Profile</span>
+                </Link>
+              </Button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
