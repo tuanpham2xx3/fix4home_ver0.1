@@ -355,21 +355,88 @@ export default function TechnicianJobs() {
     // Here you would typically call your API
   };
 
+  if (isLoading) {
+    return (
+      <Layout
+        breadcrumbs={[
+          { label: "Technician Dashboard", href: "/technician/dashboard" },
+          { label: "Jobs" },
+        ]}
+      >
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900">
+          <div className="container mx-auto px-4 py-8">
+            <div className="mb-8">
+              <Skeleton className="h-10 w-48 mb-2" />
+              <Skeleton className="h-6 w-96" />
+            </div>
+            <div className="space-y-6">
+              <Card>
+                <CardContent className="p-6">
+                  <Skeleton className="h-10 w-full" />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                  </div>
+                </CardContent>
+              </Card>
+              {[...Array(5)].map((_, i) => (
+                <Card key={i}>
+                  <CardContent className="p-6">
+                    <Skeleton className="h-24 w-full" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout
       breadcrumbs={[
         { label: "Technician Dashboard", href: "/technician/dashboard" },
-        { label: "Jobs" },
+        { label: "My Jobs" },
       ]}
     >
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-100 dark:from-green-950 dark:to-teal-900">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">My Jobs</h1>
-            <p className="text-muted-foreground">
-              Manage your service jobs and appointments
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground mb-2">
+                  My Jobs
+                </h1>
+                <p className="text-muted-foreground">
+                  Manage your service jobs and appointments (
+                  {filteredJobs.length} total)
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={viewMode === "cards" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("cards")}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Cards
+                </Button>
+                <Button
+                  variant={viewMode === "table" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("table")}
+                >
+                  <Eye className="w-4 h-4 mr-2" />
+                  Table
+                </Button>
+              </div>
+            </div>
           </div>
 
           {/* Job Tabs */}
