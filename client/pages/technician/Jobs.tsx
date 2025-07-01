@@ -439,16 +439,55 @@ export default function TechnicianJobs() {
             </div>
           </div>
 
-          {/* Job Tabs */}
+          {/* Status Filter Tabs */}
           <Card className="mb-6">
             <CardContent className="p-6">
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-5">
-                  <TabsTrigger value="all">All Jobs</TabsTrigger>
-                  <TabsTrigger value="available">Available</TabsTrigger>
-                  <TabsTrigger value="scheduled">Scheduled</TabsTrigger>
-                  <TabsTrigger value="active">Active</TabsTrigger>
-                  <TabsTrigger value="completed">Completed</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-6">
+                  <TabsTrigger value="all" className="flex items-center gap-2">
+                    <Briefcase className="w-4 h-4" />
+                    All ({allJobs.length})
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="pending"
+                    className="flex items-center gap-2"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    Pending (
+                    {allJobs.filter((j) => j.status === "pending").length})
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="scheduled"
+                    className="flex items-center gap-2"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    Scheduled (
+                    {allJobs.filter((j) => j.status === "scheduled").length})
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="in-progress"
+                    className="flex items-center gap-2"
+                  >
+                    <Clock className="w-4 h-4" />
+                    In Progress (
+                    {allJobs.filter((j) => j.status === "in-progress").length})
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="completed"
+                    className="flex items-center gap-2"
+                  >
+                    <CheckCircle className="w-4 h-4" />
+                    Completed (
+                    {allJobs.filter((j) => j.status === "completed").length})
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="cancelled"
+                    className="flex items-center gap-2"
+                  >
+                    <XCircle className="w-4 h-4" />
+                    Cancelled (
+                    {allJobs.filter((j) => j.status === "cancelled").length})
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </CardContent>
