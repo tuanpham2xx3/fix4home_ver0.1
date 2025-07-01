@@ -219,9 +219,7 @@ const App = () => {
                   path="/admin/dashboard"
                   element={
                     <ProtectedRoute allowedRoles={["admin"]}>
-                      <React.Suspense fallback={<LoadingSpinner />}>
-                        <AdminDashboard />
-                      </React.Suspense>
+                      <AdminDashboard />
                     </ProtectedRoute>
                   }
                 />
