@@ -18,19 +18,20 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+// Temporarily disabled recharts for deployment debugging
+// import {
+//   PieChart,
+//   Pie,
+//   Cell,
+//   BarChart,
+//   Bar,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+//   Tooltip,
+//   ResponsiveContainer,
+//   Legend,
+// } from "recharts";
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
