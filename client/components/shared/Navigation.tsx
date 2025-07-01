@@ -173,32 +173,7 @@ export default function Navigation() {
               ))}
 
               {/* User Menu */}
-              {isAuthenticated && user && (
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                      {getRoleIcon(userRole!)}
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">{user.name}</span>
-                      <Badge
-                        variant="outline"
-                        className={`text-xs ${getRoleBadgeColor(userRole!)}`}
-                      >
-                        {userRole}
-                      </Badge>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={logout}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </Button>
-                </div>
-              )}
+              {isAuthenticated && user && <UserMenu />}
             </div>
 
             {/* Mobile Login Button (when not authenticated) */}
