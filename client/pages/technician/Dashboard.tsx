@@ -584,107 +584,162 @@ export default function TechnicianDashboard() {
               </Card>
             </div>
 
-            {/* Quick Actions & Performance */}
+            {/* Sidebar Content */}
             <div className="space-y-6">
-              {/* Quick Actions */}
+              {/* Performance Overview */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" />
+                    Performance Overview
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <Button asChild className="w-full" size="lg">
-                    <Link to="/technician/jobs">
-                      <Wrench className="w-4 h-4 mr-2" />
-                      View All Jobs
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full"
-                    size="lg"
-                  >
-                    <Link to="/technician/profile">
-                      <User className="w-4 h-4 mr-2" />
-                      Edit Profile
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full"
-                    size="lg"
-                  >
-                    <Link to="/technician/earnings">
-                      <TrendingUp className="w-4 h-4 mr-2" />
-                      View Earnings
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Performance This Week */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>This Week's Performance</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">
-                      Jobs Completed
-                    </span>
-                    <span className="font-medium">12/15</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-green-600 h-2 rounded-full"
-                      style={{ width: "80%" }}
-                    ></div>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">
+                        Job Completion Rate
+                      </span>
+                      <span className="font-medium">
+                        {dashboardStats.completionRate}%
+                      </span>
+                    </div>
+                    <Progress
+                      value={dashboardStats.completionRate}
+                      className="h-2"
+                    />
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">
-                      Customer Satisfaction
-                    </span>
-                    <span className="font-medium">4.8/5.0</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-yellow-500 h-2 rounded-full"
-                      style={{ width: "96%" }}
-                    ></div>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">
+                        Customer Rating
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        <span className="font-medium">
+                          {dashboardStats.rating}/5.0
+                        </span>
+                      </div>
+                    </div>
+                    <Progress
+                      value={(dashboardStats.rating / 5) * 100}
+                      className="h-2"
+                    />
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">
-                      Response Time
-                    </span>
-                    <span className="font-medium">Excellent</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full"
-                      style={{ width: "92%" }}
-                    ></div>
+                  <Separator />
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">
+                        Monthly Earnings
+                      </span>
+                      <span className="font-semibold text-green-600">
+                        ${dashboardStats.monthlyEarnings.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">
+                        This Week
+                      </span>
+                      <span className="font-semibold">
+                        ${dashboardStats.weeklyEarnings.toLocaleString()}
+                      </span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Emergency Contact */}
+              {/* Notifications Panel */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-orange-600">
-                    Support Hotline
+                  <CardTitle className="flex items-center gap-2">
+                    <Bell className="w-5 h-5" />
+                    Recent Notifications
+                    {unreadCount > 0 && (
+                      <Badge className="ml-auto">{unreadCount}</Badge>
+                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    <p className="text-sm text-muted-foreground">
-                      Need help with a job? Contact our technician support:
-                    </p>
-                    <Button variant="outline" className="w-full" size="lg">
+                  {notifications.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Bell className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">
+                        No notifications
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {notifications.slice(0, 3).map((notification) => (
+                        <div
+                          key={notification.id}
+                          className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                            notification.isRead
+                              ? "bg-muted/50"
+                              : "bg-blue-50 dark:bg-blue-900/20 border-blue-200"
+                          }`}
+                          onClick={() => markNotificationRead(notification.id)}
+                        >
+                          <div className="flex items-start gap-2">
+                            {notification.type === "job_alert" && (
+                              <AlertCircle className="w-4 h-4 text-blue-500 mt-0.5" />
+                            )}
+                            {notification.type === "schedule_update" && (
+                              <Calendar className="w-4 h-4 text-orange-500 mt-0.5" />
+                            )}
+                            {notification.type === "payment" && (
+                              <DollarSign className="w-4 h-4 text-green-500 mt-0.5" />
+                            )}
+                            <div className="flex-1">
+                              <p className="font-medium text-sm">
+                                {notification.title}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {notification.message}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {notification.time}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {notifications.length > 3 && (
+                        <Button variant="outline" size="sm" className="w-full">
+                          View All Notifications
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Support & Emergency */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-orange-600">
+                    <Phone className="w-5 h-5" />
+                    Support & Emergency
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Alert>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      24/7 technician support available for urgent issues
+                    </AlertDescription>
+                  </Alert>
+
+                  <div className="space-y-2">
+                    <Button variant="outline" className="w-full justify-start">
                       <Phone className="w-4 h-4 mr-2" />
                       Call Support: 1900-5678
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      Live Chat Support
                     </Button>
                   </div>
                 </CardContent>
