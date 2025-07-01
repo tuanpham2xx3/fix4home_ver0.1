@@ -1,29 +1,4 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import Layout from "@/components/shared/Layout";
-import {
-  Star,
-  Phone,
-  MessageCircle,
-  CheckCircle,
-  Users,
-  Award,
-  Clock,
-  Shield,
-  Wrench,
-  Zap,
-  Paintbrush,
-  Hammer,
-  Droplets,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-  Play,
-  TrendingUp,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+import Navigation from "@/components/shared/Navigation";
 
 // Services data - can be set to empty array to test empty state
 const services = [
