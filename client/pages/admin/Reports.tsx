@@ -418,17 +418,15 @@ export default function AdminReports() {
                 <CardTitle>Orders Trend</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={getCurrentData()}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="period" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="orders" fill="#10b981" name="Orders" />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className="h-80 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="w-8 h-8 text-primary" />
+                    </div>
+                    <p className="text-muted-foreground">
+                      Orders Chart - deployment debugging
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
