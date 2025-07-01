@@ -44,13 +44,13 @@ import TechnicianProfile from "./pages/technician/Profile";
 import TechnicianStatistics from "./pages/technician/Statistics";
 import TechnicianReviews from "./pages/technician/Reviews";
 
-// Admin Pages
-import AdminDashboard from "./pages/admin/Dashboard";
-import AdminUsers from "./pages/admin/Users";
-import AdminTechnicians from "./pages/admin/Technicians";
-import AdminOrders from "./pages/admin/Orders";
-import AdminServices from "./pages/admin/Services";
-import AdminReports from "./pages/admin/Reports";
+// Admin Pages (lazy loaded to reduce bundle size)
+const AdminDashboard = React.lazy(() => import("./pages/admin/Dashboard"));
+const AdminUsers = React.lazy(() => import("./pages/admin/Users"));
+const AdminTechnicians = React.lazy(() => import("./pages/admin/Technicians"));
+const AdminOrders = React.lazy(() => import("./pages/admin/Orders"));
+const AdminServices = React.lazy(() => import("./pages/admin/Services"));
+const AdminReports = React.lazy(() => import("./pages/admin/Reports"));
 
 const queryClient = new QueryClient();
 
