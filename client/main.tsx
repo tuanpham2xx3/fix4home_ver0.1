@@ -27,6 +27,7 @@ import CustomerDashboard from "./pages/customer/Dashboard";
 import CustomerOrders from "./pages/customer/Orders";
 import CustomerOrderDetail from "./pages/customer/OrderDetail";
 import CustomerProfile from "./pages/customer/Profile";
+import CustomerReviews from "./pages/customer/Reviews";
 
 // Technician Pages
 import TechnicianDashboard from "./pages/technician/Dashboard";
@@ -97,6 +98,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["customer"]}>
                   <CustomerProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/customer/reviews"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <CustomerReviews />
                 </ProtectedRoute>
               }
             />
