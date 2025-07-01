@@ -693,7 +693,7 @@ function ServiceDetailSkeleton() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 
