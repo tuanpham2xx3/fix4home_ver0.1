@@ -20,12 +20,17 @@ import Privacy from "./pages/Privacy";
 
 const queryClient = new QueryClient();
 
+// Get basename from environment or use default for GitHub Pages
+const basename = import.meta.env.MODE === 'production' 
+  ? '/fix4home_ver0.1' 
+  : '';
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/home" element={<Index />} />
