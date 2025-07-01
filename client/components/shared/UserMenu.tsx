@@ -24,6 +24,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function UserMenu() {
   const { user, userRole, logout } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (!user || !userRole) {
     return null;
@@ -95,6 +96,21 @@ export default function UserMenu() {
             icon: <Wrench className="w-4 h-4" />,
             label: "My Jobs",
             href: "/technician/jobs",
+          },
+          {
+            icon: <Calendar className="w-4 h-4" />,
+            label: "Calendar",
+            href: "/technician/calendar",
+          },
+          {
+            icon: <BarChart3 className="w-4 h-4" />,
+            label: "Statistics",
+            href: "/technician/statistics",
+          },
+          {
+            icon: <Star className="w-4 h-4" />,
+            label: "Reviews",
+            href: "/technician/reviews",
           },
           {
             icon: <UserCircle className="w-4 h-4" />,
