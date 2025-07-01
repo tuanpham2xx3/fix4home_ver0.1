@@ -701,7 +701,6 @@ function ServiceDetailSkeleton() {
 function ServiceNotFound() {
   return (
     <Layout>
-
       <div className="container mx-auto px-4 py-20">
         <div className="text-center max-w-md mx-auto">
           <div className="w-32 h-32 bg-gradient-to-br from-destructive/20 to-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-8">
@@ -727,6 +726,6 @@ function ServiceNotFound() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
