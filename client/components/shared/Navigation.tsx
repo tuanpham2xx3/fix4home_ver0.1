@@ -1,11 +1,23 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Wrench, Phone, Menu, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import {
+  Wrench,
+  Phone,
+  Menu,
+  X,
+  User,
+  LogOut,
+  Settings,
+  Shield,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, userRole, user, logout } = useAuth();
 
   const isActive = (path: string) => {
     if (path === "/" || path === "/home") {
@@ -26,7 +38,54 @@ export default function Navigation() {
     { path: "/terms", label: "Terms of Use" },
   ];
 
-  const authLinks = [{ path: "/login", label: "Login" }];
+  // Role-based navigation links
+  const roleBasedLinks = {
+    customer: [
+      { path: "/customer/dashboard", label: "Dashboard" },
+      { path: "/customer/orders", label: "My Orders" },
+      { path: "/customer/profile", label: "Profile" },
+    ],
+    technician: [
+      { path: "/technician/dashboard", label: "Dashboard" },
+      { path: "/technician/jobs", label: "My Jobs" },
+      { path: "/technician/profile", label: "Profile" },
+    ],
+    admin: [
+      { path: "/admin/dashboard", label: "Admin Dashboard" },
+      { path: "/admin/users", label: "Manage Users" },
+    ],
+  };
+
+  const authLinks = isAuthenticated ? [] : [{ path: "/login", label: "Login" }];
+
+  const userLinks =
+    isAuthenticated && userRole ? roleBasedLinks[userRole] || [] : [];
+
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case "admin":
+        return <Shield className="w-4 h-4" />;
+      case "technician":
+        return <Settings className="w-4 h-4" />;
+      case "customer":
+        return <User className="w-4 h-4" />;
+      default:
+        return <User className="w-4 h-4" />;
+    }
+  };
+
+  const getRoleBadgeColor = (role: string) => {
+    switch (role) {
+      case "admin":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "technician":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "customer":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
 
   return (
     <nav className="border-b bg-white sticky top-0 z-50 shadow-sm">
@@ -56,6 +115,26 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Role-based Links */}
+            {userLinks.length > 0 && (
+              <>
+                <div className="h-6 w-px bg-border mx-2" />
+                {userLinks.map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`font-medium transition-colors hover:text-primary ${
+                      isActive(link.path)
+                        ? "text-primary border-b-2 border-primary pb-1"
+                        : "text-foreground"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </>
+            )}
 
             {/* Legal Links */}
             <div className="h-6 w-px bg-border mx-2" />
@@ -88,6 +167,34 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
+
+            {/* User Menu */}
+            {isAuthenticated && user && (
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+                    {getRoleIcon(userRole!)}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">{user.name}</span>
+                    <Badge
+                      variant="outline"
+                      className={`text-xs ${getRoleBadgeColor(userRole!)}`}
+                    >
+                      {userRole}
+                    </Badge>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={logout}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -114,6 +221,26 @@ export default function Navigation() {
         {mobileMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 border-t pt-4">
             <div className="flex flex-col space-y-4">
+              {/* User Info */}
+              {isAuthenticated && user && (
+                <div className="border-b pb-4 mb-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+                      {getRoleIcon(userRole!)}
+                    </div>
+                    <div>
+                      <p className="font-medium">{user.name}</p>
+                      <Badge
+                        variant="outline"
+                        className={`text-xs ${getRoleBadgeColor(userRole!)}`}
+                      >
+                        {userRole}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Main Navigation */}
               {navigationLinks.map((link) => (
                 <Link
@@ -127,6 +254,27 @@ export default function Navigation() {
                   {link.label}
                 </Link>
               ))}
+
+              {/* Role-based Links */}
+              {userLinks.length > 0 && (
+                <div className="border-t pt-4 mt-4">
+                  <div className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wide">
+                    {userRole} Dashboard
+                  </div>
+                  {userLinks.map((link) => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className={`block py-1 font-medium transition-colors hover:text-primary ${
+                        isActive(link.path) ? "text-primary" : "text-foreground"
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
 
               {/* Legal Links */}
               <div className="border-t pt-4 mt-4">
@@ -150,20 +298,39 @@ export default function Navigation() {
               </div>
 
               {/* Auth Links */}
-              <div className="border-t pt-4 mt-4">
-                {authLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`font-medium transition-colors hover:text-primary ${
-                      isActive(link.path) ? "text-primary" : "text-foreground"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
+              {authLinks.length > 0 && (
+                <div className="border-t pt-4 mt-4">
+                  {authLinks.map((link) => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className={`font-medium transition-colors hover:text-primary ${
+                        isActive(link.path) ? "text-primary" : "text-foreground"
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* Logout Button */}
+              {isAuthenticated && (
+                <div className="border-t pt-4 mt-4">
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full justify-start text-muted-foreground hover:text-foreground"
                   >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </Button>
+                </div>
+              )}
 
               {/* Mobile Hotline Button */}
               <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold w-full mt-4">
