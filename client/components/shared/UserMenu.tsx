@@ -140,80 +140,146 @@ export default function UserMenu() {
   const menuItems = getMenuItems(userRole);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="relative h-10 w-10 rounded-full hover:bg-accent/10 focus:bg-accent/10"
-        >
-          <Avatar className="h-10 w-10 border-2 border-primary/20">
-            <AvatarImage
-              src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
-              alt={user.name}
-            />
-            <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-              {getAvatarFallback(user.name)}
-            </AvatarFallback>
-          </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-80 md:w-72" align="end" sideOffset={8}>
-        {/* User Info Header */}
-        <div className="flex items-center space-x-3 p-3">
-          <Avatar className="h-12 w-12 border-2 border-primary/20">
-            <AvatarImage
-              src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
-              alt={user.name}
-            />
-            <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-              {getAvatarFallback(user.name)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold truncate">{user.name}</p>
-            <p className="text-xs text-muted-foreground truncate">
-              {user.email}
-            </p>
-            <Badge
-              variant="outline"
-              className={`text-xs mt-1 ${getRoleBadgeColor(userRole)}`}
+    <>
+      {/* Avatar Button */}
+      <Button
+        variant="ghost"
+        className="relative h-10 w-10 rounded-full hover:bg-accent/10 focus:bg-accent/10"
+        onClick={() => setSidebarOpen(true)}
+      >
+        <Avatar className="h-10 w-10 border-2 border-primary/20">
+          <AvatarImage
+            src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
+            alt={user.name}
+          />
+          <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground">
+            {getAvatarFallback(user.name)}
+          </AvatarFallback>
+        </Avatar>
+      </Button>
+
+      {/* Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-50 transition-opacity"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 right-0 h-full w-80 bg-background border-l shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b">
+            <h2 className="text-lg font-semibold">Menu</h2>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSidebarOpen(false)}
+              className="h-8 w-8"
             >
-              <span className="mr-1">{getRoleIcon(userRole)}</span>
-              {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
-            </Badge>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* User Info */}
+          <div className="p-6 border-b">
+            <div className="flex items-center space-x-3">
+              <Avatar className="h-16 w-16 border-2 border-primary/20">
+                <AvatarImage
+                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
+                  alt={user.name}
+                />
+                <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-lg">
+                  {getAvatarFallback(user.name)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="text-base font-semibold truncate">{user.name}</p>
+                <p className="text-sm text-muted-foreground truncate">
+                  {user.email}
+                </p>
+                <Badge
+                  variant="outline"
+                  className={`text-xs mt-2 ${getRoleBadgeColor(userRole)}`}
+                >
+                  <span className="mr-1">{getRoleIcon(userRole)}</span>
+                  {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
+                </Badge>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Items */}
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="space-y-2">
+              {menuItems.map((item, index) => (
+                <Link
+                  key={index}
+                  to={item.href}
+                  onClick={() => setSidebarOpen(false)}
+                  className="flex items-center space-x-3 px-4 py-3 text-sm rounded-lg hover:bg-accent/50 transition-colors group"
+                >
+                  <span className="text-muted-foreground group-hover:text-foreground">
+                    {item.icon}
+                  </span>
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+
+            <Separator className="my-6" />
+
+            {/* Quick Actions for Technicians */}
+            {userRole === "technician" && (
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-4 mb-3">
+                  Quick Actions
+                </p>
+                <Link
+                  to="/technician/jobs?filter=pending"
+                  onClick={() => setSidebarOpen(false)}
+                  className="flex items-center space-x-3 px-4 py-3 text-sm rounded-lg hover:bg-accent/50 transition-colors group"
+                >
+                  <span className="text-muted-foreground group-hover:text-foreground">
+                    <ClipboardList className="w-4 h-4" />
+                  </span>
+                  <span className="font-medium">Browse Available Jobs</span>
+                </Link>
+                <Link
+                  to="/technician/calendar"
+                  onClick={() => setSidebarOpen(false)}
+                  className="flex items-center space-x-3 px-4 py-3 text-sm rounded-lg hover:bg-accent/50 transition-colors group"
+                >
+                  <span className="text-muted-foreground group-hover:text-foreground">
+                    <Calendar className="w-4 h-4" />
+                  </span>
+                  <span className="font-medium">Today's Schedule</span>
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Actions */}
+          <div className="p-4 border-t">
+            <Button
+              onClick={() => {
+                logout();
+                setSidebarOpen(false);
+              }}
+              variant="ghost"
+              className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+            >
+              <LogOut className="w-4 h-4 mr-3" />
+              <span>Logout</span>
+            </Button>
           </div>
         </div>
-
-        <DropdownMenuSeparator />
-
-        {/* Navigation Items */}
-        <div className="py-1">
-          {menuItems.map((item, index) => (
-            <DropdownMenuItem key={index} asChild className="cursor-pointer">
-              <Link
-                to={item.href}
-                className="flex items-center space-x-3 px-3 py-2 text-sm"
-              >
-                <span className="text-muted-foreground">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            </DropdownMenuItem>
-          ))}
-        </div>
-
-        <DropdownMenuSeparator />
-
-        {/* Logout */}
-        <div className="py-1">
-          <DropdownMenuItem
-            onClick={logout}
-            className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
-          >
-            <LogOut className="w-4 h-4 mr-3" />
-            <span>Logout</span>
-          </DropdownMenuItem>
-        </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </div>
+    </>
   );
 }
