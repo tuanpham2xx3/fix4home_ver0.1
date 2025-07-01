@@ -1,14 +1,23 @@
+import "./global.css";
+
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Absolute minimal React app for deployment debugging
+// Basic pages
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+
 const App = () => {
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1>FIX4HOME - Deployment Test</h1>
-      <p>If you can see this, the basic deployment is working.</p>
-      <p>Build timestamp: {new Date().toISOString()}</p>
-    </div>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </React.StrictMode>
   );
 };
 
