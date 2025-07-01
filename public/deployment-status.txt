@@ -1,0 +1,3 @@
+Deployment successful - Build completed at $(date)
+Node.js version required: 18+
+Build command: npm run build:gh-pages
