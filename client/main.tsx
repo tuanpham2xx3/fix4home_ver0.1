@@ -161,6 +161,22 @@ const App = () => (
               }
             />
             <Route
+              path="/technician/jobs/:id"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianJobDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/technician/calendar"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianCalendar />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/technician/profile"
               element={
                 <ProtectedRoute allowedRoles={["technician"]}>
