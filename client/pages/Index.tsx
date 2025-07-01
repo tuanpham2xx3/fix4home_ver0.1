@@ -242,9 +242,9 @@ export default function Index() {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="text-lg px-8 py-6 border-white text-white hover:bg-white hover:text-primary font-semibold"
+                      className="group text-lg px-8 py-6 border-white/70 text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:border-white hover:scale-105 hover:shadow-xl transition-all duration-300 font-semibold"
                     >
-                      <Play className="w-5 h-5 mr-2" />
+                      <Play className="w-5 h-5 mr-2 transition-transform duration-300 group-hover:scale-110" />
                       Watch Demo
                     </Button>
                   </div>
