@@ -224,8 +224,8 @@ export default function AdminOrders() {
       return matchesSearch && matchesStatus;
     })
     .sort((a, b) => {
-      let aValue = a[sortBy as keyof Order];
-      let bValue = b[sortBy as keyof Order];
+      let aValue: string | number = a[sortBy as keyof Order] as string;
+      let bValue: string | number = b[sortBy as keyof Order] as string;
 
       if (sortBy === "totalPrice") {
         aValue = parseFloat(a.totalPrice.replace("$", "").replace(",", ""));
