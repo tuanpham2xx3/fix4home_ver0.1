@@ -30,13 +30,13 @@ export default function Navigation() {
   const navigationLinks = [
     { path: "/", label: "Home" },
     { path: "/services", label: "Services" },
-    { path: "/about", label: "About Us" },
+    { path: "/about", label: "About" },
     { path: "/contact", label: "Contact" },
   ];
 
   const legalLinks = [
-    { path: "/privacy", label: "Privacy Policy" },
-    { path: "/terms", label: "Terms of Use" },
+    { path: "/privacy", label: "Privacy" },
+    { path: "/terms", label: "Terms" },
   ];
 
   // Role-based navigation links
