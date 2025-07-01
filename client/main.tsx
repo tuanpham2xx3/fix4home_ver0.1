@@ -37,6 +37,8 @@ import ConfirmBooking from "./pages/booking/ConfirmBooking";
 // Technician Pages
 import TechnicianDashboard from "./pages/technician/Dashboard";
 import TechnicianJobs from "./pages/technician/Jobs";
+import TechnicianJobDetail from "./pages/technician/JobDetail";
+import TechnicianCalendar from "./pages/technician/Calendar";
 import TechnicianProfile from "./pages/technician/Profile";
 
 // Admin Pages
