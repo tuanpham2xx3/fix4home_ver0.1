@@ -40,6 +40,8 @@ import TechnicianJobs from "./pages/technician/Jobs";
 import TechnicianJobDetail from "./pages/technician/JobDetail";
 import TechnicianCalendar from "./pages/technician/Calendar";
 import TechnicianProfile from "./pages/technician/Profile";
+import TechnicianStatistics from "./pages/technician/Statistics";
+import TechnicianReviews from "./pages/technician/Reviews";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/Dashboard";
