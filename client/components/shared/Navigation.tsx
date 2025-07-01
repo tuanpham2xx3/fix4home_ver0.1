@@ -112,25 +112,6 @@ export default function Navigation() {
           <div className="flex items-center justify-end space-x-4">
             {/* Desktop Auth/User Menu */}
             <div className="hidden lg:flex items-center space-x-4">
-              {/* Role-based Links for logged in users */}
-              {userLinks.length > 0 && (
-                <div className="flex items-center space-x-4">
-                  {userLinks.map((link) => (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      className={`text-sm font-medium transition-colors hover:text-primary ${
-                        isActive(link.path)
-                          ? "text-primary border-b-2 border-primary pb-1"
-                          : "text-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-
               {/* Login Link */}
               {authLinks.map((link) => (
                 <Link
