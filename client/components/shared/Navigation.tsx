@@ -186,10 +186,10 @@ export default function Navigation() {
               </Link>
             )}
 
-            {/* Mobile User Icon (when authenticated) */}
+            {/* Mobile User Menu (when authenticated) */}
             {isAuthenticated && user && (
-              <div className="lg:hidden w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                {getRoleIcon(userRole!)}
+              <div className="lg:hidden">
+                <UserMenu />
               </div>
             )}
 
