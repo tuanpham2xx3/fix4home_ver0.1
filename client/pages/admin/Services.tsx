@@ -347,7 +347,7 @@ export default function AdminServices() {
               <Label htmlFor="status">Status</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) =>
+                onValueChange={(value: "active" | "inactive" | "draft") =>
                   setFormData({ ...formData, status: value })
                 }
               >
