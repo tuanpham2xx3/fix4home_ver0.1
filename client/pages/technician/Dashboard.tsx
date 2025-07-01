@@ -188,18 +188,203 @@ export default function TechnicianDashboard() {
     }
   };
 
+  const markNotificationRead = (id: number) => {
+    setNotifications(
+      notifications.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+    );
+  };
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  if (isLoading) {
+    return (
+      <Layout breadcrumbs={[{ label: "Technician Dashboard" }]}>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900">
+          <div className="container mx-auto px-4 py-8">
+            <div className="mb-8">
+              <Skeleton className="h-10 w-96 mb-2" />
+              <Skeleton className="h-6 w-64" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              {[...Array(4)].map((_, i) => (
+                <Card key={i}>
+                  <CardContent className="p-6">
+                    <Skeleton className="h-16 w-full" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                <Card>
+                  <CardHeader>
+                    <Skeleton className="h-6 w-32" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {[...Array(3)].map((_, i) => (
+                        <Skeleton key={i} className="h-24 w-full" />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="space-y-6">
+                {[...Array(3)].map((_, i) => (
+                  <Card key={i}>
+                    <CardHeader>
+                      <Skeleton className="h-6 w-24" />
+                    </CardHeader>
+                    <CardContent>
+                      <Skeleton className="h-32 w-full" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout breadcrumbs={[{ label: "Technician Dashboard" }]}>
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-100 dark:from-green-950 dark:to-teal-900">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900">
         <div className="container mx-auto px-4 py-8">
-          {/* Welcome Header */}
+          {/* Welcome Header with Navigation */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Welcome back, {user?.name}!
-            </h1>
-            <p className="text-muted-foreground">
-              Manage your jobs and track your earnings
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground mb-2">
+                  Welcome back, {user?.name || "Alex Thompson"}!
+                </h1>
+                <p className="text-muted-foreground">
+                  Ready to tackle today's challenges
+                </p>
+              </div>
+
+              {/* Quick Navigation Menu */}
+              <div className="flex items-center gap-3">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="relative">
+                      <Bell className="w-4 h-4 mr-2" />
+                      Notifications
+                      {unreadCount > 0 && (
+                        <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs">
+                          {unreadCount}
+                        </Badge>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-80">
+                    <div className="p-2">
+                      <h4 className="font-medium mb-2">Notifications</h4>
+                      {notifications.length === 0 ? (
+                        <p className="text-sm text-muted-foreground p-2">
+                          No notifications
+                        </p>
+                      ) : (
+                        <div className="space-y-1">
+                          {notifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className={`p-3 rounded-lg cursor-pointer transition-colors ${
+                                notification.isRead
+                                  ? "bg-muted/50"
+                                  : "bg-blue-50 dark:bg-blue-900/20 border-l-2 border-blue-500"
+                              }`}
+                              onClick={() =>
+                                markNotificationRead(notification.id)
+                              }
+                            >
+                              <div className="flex items-start gap-2">
+                                {notification.type === "job_alert" && (
+                                  <Briefcase className="w-4 h-4 text-blue-500 mt-0.5" />
+                                )}
+                                {notification.type === "schedule_update" && (
+                                  <Calendar className="w-4 h-4 text-orange-500 mt-0.5" />
+                                )}
+                                {notification.type === "payment" && (
+                                  <DollarSign className="w-4 h-4 text-green-500 mt-0.5" />
+                                )}
+                                <div className="flex-1">
+                                  <p className="font-medium text-sm">
+                                    {notification.title}
+                                  </p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {notification.message}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    {notification.time}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      <Menu className="w-4 h-4 mr-2" />
+                      Quick Menu
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                      <Link to="/technician/jobs" className="flex items-center">
+                        <Briefcase className="w-4 h-4 mr-2" />
+                        Jobs
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/technician/calendar"
+                        className="flex items-center"
+                      >
+                        <CalendarDays className="w-4 h-4 mr-2" />
+                        Calendar
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/technician/profile"
+                        className="flex items-center"
+                      >
+                        <User className="w-4 h-4 mr-2" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/technician/reviews"
+                        className="flex items-center"
+                      >
+                        <Star className="w-4 h-4 mr-2" />
+                        Reviews
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings" className="flex items-center">
+                        <Settings className="w-4 h-4 mr-2" />
+                        Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-red-600">
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
           </div>
 
           {/* Quick Stats */}
