@@ -239,7 +239,9 @@ export default function ServiceDetail() {
                   size="lg"
                   className="text-lg px-8 py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold"
                   onClick={() => {
-                    document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                      .getElementById("booking-section")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   <Wrench className="w-5 h-5 mr-2" />
@@ -250,7 +252,9 @@ export default function ServiceDetail() {
                   size="lg"
                   className="group text-lg px-8 py-6 border-white/70 text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:border-white hover:scale-105 hover:shadow-xl transition-all duration-300 font-semibold"
                   onClick={() => {
-                    document.getElementById('service-details')?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                      .getElementById("service-details")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   <BookOpen className="w-5 h-5 mr-2 transition-transform duration-300 group-hover:scale-110" />
@@ -263,7 +267,10 @@ export default function ServiceDetail() {
       </section>
 
       {/* Service Header */}
-      <section className="py-12 bg-gradient-to-br from-primary/10 via-background to-accent/20" id="service-details">
+      <section
+        className="py-12 bg-gradient-to-br from-primary/10 via-background to-accent/20"
+        id="service-details"
+      >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -648,7 +655,7 @@ export default function ServiceDetail() {
           </Card>
         </div>
       )}
-    </div>
+    </Layout>
   );
 }
 
