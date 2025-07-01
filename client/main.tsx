@@ -8,10 +8,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
+// Get basename from environment or use default for GitHub Pages
+const basename =
+  import.meta.env.MODE === "production" ? "/fix4home_ver0.1" : "";
+
 const App = () => {
   return (
     <React.StrictMode>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="*" element={<NotFound />} />
