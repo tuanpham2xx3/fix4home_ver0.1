@@ -10,6 +10,10 @@ import {
   LogOut,
   Settings,
   Shield,
+  Users,
+  ShoppingCart,
+  FileText,
+  LayoutDashboard,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
