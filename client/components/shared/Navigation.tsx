@@ -191,13 +191,25 @@ export default function Navigation() {
                 <div className="border-b pb-4 mb-4">
                   <div className="flex items-center space-x-3 mb-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                      {getRoleIcon(userRole!)}
+                      {userRole === "admin" ? (
+                        <Shield className="w-4 h-4 text-white" />
+                      ) : userRole === "technician" ? (
+                        <Settings className="w-4 h-4 text-white" />
+                      ) : (
+                        <User className="w-4 h-4 text-white" />
+                      )}
                     </div>
                     <div>
                       <p className="font-medium">{user.name}</p>
                       <Badge
                         variant="outline"
-                        className={`text-xs ${getRoleBadgeColor(userRole!)}`}
+                        className={`text-xs ${
+                          userRole === "admin"
+                            ? "bg-purple-100 text-purple-800 border-purple-200"
+                            : userRole === "technician"
+                              ? "bg-blue-100 text-blue-800 border-blue-200"
+                              : "bg-green-100 text-green-800 border-green-200"
+                        }`}
                       >
                         {userRole}
                       </Badge>
