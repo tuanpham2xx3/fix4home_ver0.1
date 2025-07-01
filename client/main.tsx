@@ -58,177 +58,173 @@ const App = () => {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <BrowserRouter basename={basename}>
-            <AuthProvider>
-              <Toaster />
-              <Sonner />
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/home" element={<Index />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/services/:id" element={<ServiceDetail />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/login" element={<Login />} />
-                <Route
-                  path="/register-customer"
-                  element={<RegisterCustomer />}
-                />
-                <Route
-                  path="/register-technician"
-                  element={<RegisterTechnician />}
-                />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/privacy" element={<Privacy />} />
+        <BrowserRouter basename={basename}>
+          <AuthProvider>
+            <Toaster />
+            <Sonner />
+            <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/home" element={<Index />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/services/:id" element={<ServiceDetail />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register-customer" element={<RegisterCustomer />} />
+            <Route
+              path="/register-technician"
+              element={<RegisterTechnician />}
+            />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
 
-                {/* Customer Protected Routes */}
-                <Route
-                  path="/customer/dashboard"
-                  element={
-                    <ProtectedRoute allowedRoles={["customer"]}>
-                      <CustomerDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/customer/orders"
-                  element={
-                    <ProtectedRoute allowedRoles={["customer"]}>
-                      <CustomerOrders />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/customer/orders/:id"
-                  element={
-                    <ProtectedRoute allowedRoles={["customer"]}>
-                      <CustomerOrderDetail />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/customer/profile"
-                  element={
-                    <ProtectedRoute allowedRoles={["customer"]}>
-                      <CustomerProfile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/customer/reviews"
-                  element={
-                    <ProtectedRoute allowedRoles={["customer"]}>
-                      <CustomerReviews />
-                    </ProtectedRoute>
-                  }
-                />
+            {/* Customer Protected Routes */}
+            <Route
+              path="/customer/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <CustomerDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/customer/orders"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <CustomerOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/customer/orders/:id"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <CustomerOrderDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/customer/profile"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <CustomerProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/customer/reviews"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <CustomerReviews />
+                </ProtectedRoute>
+              }
+            />
 
-                {/* Booking Flow Routes */}
-                <Route
-                  path="/booking/service/:id"
-                  element={
-                    <ProtectedRoute allowedRoles={["customer"]}>
-                      <BookService />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/booking/technician/:serviceId"
-                  element={
-                    <ProtectedRoute allowedRoles={["customer"]}>
-                      <TechnicianSelection />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/booking/confirm"
-                  element={
-                    <ProtectedRoute allowedRoles={["customer"]}>
-                      <ConfirmBooking />
-                    </ProtectedRoute>
-                  }
-                />
+            {/* Booking Flow Routes */}
+            <Route
+              path="/booking/service/:id"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <BookService />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/booking/technician/:serviceId"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <TechnicianSelection />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/booking/confirm"
+              element={
+                <ProtectedRoute allowedRoles={["customer"]}>
+                  <ConfirmBooking />
+                </ProtectedRoute>
+              }
+            />
 
-                {/* Technician Protected Routes */}
-                <Route
-                  path="/technician/dashboard"
-                  element={
-                    <ProtectedRoute allowedRoles={["technician"]}>
-                      <TechnicianDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/technician/jobs"
-                  element={
-                    <ProtectedRoute allowedRoles={["technician"]}>
-                      <TechnicianJobs />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/technician/jobs/:id"
-                  element={
-                    <ProtectedRoute allowedRoles={["technician"]}>
-                      <TechnicianJobDetail />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/technician/calendar"
-                  element={
-                    <ProtectedRoute allowedRoles={["technician"]}>
-                      <TechnicianCalendar />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/technician/profile"
-                  element={
-                    <ProtectedRoute allowedRoles={["technician"]}>
-                      <TechnicianProfile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/technician/statistics"
-                  element={
-                    <ProtectedRoute allowedRoles={["technician"]}>
-                      <TechnicianStatistics />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/technician/reviews"
-                  element={
-                    <ProtectedRoute allowedRoles={["technician"]}>
-                      <TechnicianReviews />
-                    </ProtectedRoute>
-                  }
-                />
+            {/* Technician Protected Routes */}
+            <Route
+              path="/technician/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/technician/jobs"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianJobs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/technician/jobs/:id"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianJobDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/technician/calendar"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianCalendar />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/technician/profile"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/technician/statistics"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianStatistics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/technician/reviews"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianReviews />
+                </ProtectedRoute>
+              }
+            />
 
-                {/* Admin Protected Routes */}
-                <Route
-                  path="/admin/dashboard"
-                  element={
-                    <ProtectedRoute allowedRoles={["admin"]}>
-                      <AdminDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/users"
-                  element={
-                    <ProtectedRoute allowedRoles={["admin"]}>
-                      <AdminUsers />
-                    </ProtectedRoute>
-                  }
-                />
+            {/* Admin Protected Routes */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminUsers />
+                </ProtectedRoute>
+              }
+            />
 
-                {/* Catch-all route - must be last */}
-                <Route path="*" element={<NotFound />} />
+            {/* Catch-all route - must be last */}
+            <Route path="*" element={<NotFound />} />
               </Routes>
             </AuthProvider>
           </BrowserRouter>
