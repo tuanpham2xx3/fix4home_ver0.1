@@ -1,16 +1,10 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Wrench, Menu, X } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 export default function Navigation() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   const isActive = (path: string) => {
-    if (path === "/" || path === "/home") {
-      return location.pathname === "/" || location.pathname === "/home";
-    }
     return location.pathname === path;
   };
 
