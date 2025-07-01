@@ -206,87 +206,64 @@ export default function ServiceDetail() {
     return <ServiceNotFound />;
   }
 
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Services", href: "/services" },
+    { label: service.name },
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b bg-white sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                <Wrench className="h-6 w-6 text-white" />
+    <Layout breadcrumbs={breadcrumbs}>
+      {/* Hero Section with Blue Background */}
+      <section className="relative h-[300px] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/60 to-secondary/70" />
+        <div className="absolute inset-0 flex items-center">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center text-white">
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <Badge className="bg-white/20 text-white border-white/30">
+                  {service.category}
+                </Badge>
+                <Badge className="bg-green-500/20 text-green-100 border-green-300/30">
+                  Available 24/7
+                </Badge>
               </div>
-              <span className="text-2xl font-bold text-foreground">
-                FIX4HOME
-              </span>
-            </Link>
-
-            <div className="hidden md:flex items-center space-x-8">
-              <Link
-                to="/"
-                className="text-foreground hover:text-primary font-medium transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                to="/services"
-                className="text-primary font-semibold border-b-2 border-primary pb-1"
-              >
-                Services
-              </Link>
-              <Link
-                to="/about"
-                className="text-foreground hover:text-primary font-medium transition-colors"
-              >
-                About Us
-              </Link>
-              <Link
-                to="/contact"
-                className="text-foreground hover:text-primary font-medium transition-colors"
-              >
-                Contact
-              </Link>
-              <Link
-                to="/login"
-                className="text-foreground hover:text-primary font-medium transition-colors"
-              >
-                Login
-              </Link>
+              <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+                {service.name}
+              </h1>
+              <p className="text-lg md:text-xl mb-6 max-w-2xl mx-auto leading-relaxed opacity-90">
+                {service.shortDescription}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <Button
+                  size="lg"
+                  className="text-lg px-8 py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold"
+                  onClick={() => {
+                    document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  <Wrench className="w-5 h-5 mr-2" />
+                  Book Now
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="group text-lg px-8 py-6 border-white/70 text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:border-white hover:scale-105 hover:shadow-xl transition-all duration-300 font-semibold"
+                  onClick={() => {
+                    document.getElementById('service-details')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  <BookOpen className="w-5 h-5 mr-2 transition-transform duration-300 group-hover:scale-110" />
+                  Learn More
+                </Button>
+              </div>
             </div>
-
-            <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
-              <Phone className="w-4 h-4 mr-2" />
-              Hotline: 1900-1234
-            </Button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Breadcrumb */}
-      <section className="bg-muted/30 py-4">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center space-x-2 text-sm">
-            <Link
-              to="/"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Home className="w-4 h-4" />
-            </Link>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-            <Link
-              to="/services"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              Services
-            </Link>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-            <span className="text-primary font-medium">{service.name}</span>
           </div>
         </div>
       </section>
 
       {/* Service Header */}
-      <section className="py-12 bg-gradient-to-br from-primary/10 via-background to-accent/20">
+      <section className="py-12 bg-gradient-to-br from-primary/10 via-background to-accent/20" id="service-details">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
