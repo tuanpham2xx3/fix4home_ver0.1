@@ -1,28 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Wrench,
-  Phone,
-  Menu,
-  X,
-  User,
-  LogOut,
-  Settings,
-  Shield,
-  Users,
-  ShoppingCart,
-  FileText,
-  LayoutDashboard,
-} from "lucide-react";
+import { Wrench, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import UserMenu from "./UserMenu";
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const { isAuthenticated, userRole, user, logout } = useAuth();
 
   const isActive = (path: string) => {
     if (path === "/" || path === "/home") {
