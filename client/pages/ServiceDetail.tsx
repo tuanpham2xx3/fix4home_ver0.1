@@ -35,7 +35,7 @@ const mockServices = {
     id: 1,
     name: "Emergency Plumbing Repair",
     description: `Our emergency plumbing repair service provides immediate assistance for urgent plumbing issues that can't wait. Our certified technicians are available 24/7 to handle everything from burst pipes and severe leaks to clogged drains and toilet overflows.
-    
+
 We understand that plumbing emergencies can cause significant damage to your property if not addressed quickly. That's why we guarantee a response time of under 2 hours for emergency calls within our service areas.
 
 Our comprehensive emergency plumbing service includes advanced diagnostic equipment, professional-grade tools, and high-quality replacement parts to ensure lasting repairs. All work comes with our satisfaction guarantee and warranty coverage.`,
@@ -332,9 +332,11 @@ export default function ServiceDetail() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" onClick={() => setIsBookingOpen(true)}>
-                  <Calendar className="w-5 h-5 mr-2" />
-                  Book This Service
+                <Button size="lg" asChild>
+                  <Link to={`/booking/service/${service.id}`}>
+                    <Calendar className="w-5 h-5 mr-2" />
+                    Book This Service
+                  </Link>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
                   <Link to="/contact">
