@@ -440,29 +440,15 @@ export default function AdminReports() {
                 <CardTitle>Revenue by Service</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={serviceBreakdown}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={renderCustomizedLabel}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="revenue"
-                      >
-                        {serviceBreakdown.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value) => [`$${value}`, "Revenue"]}
-                      />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
+                <div className="h-80 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="w-8 h-8 text-primary" />
+                    </div>
+                    <p className="text-muted-foreground">
+                      Service Revenue Chart - deployment debugging
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
