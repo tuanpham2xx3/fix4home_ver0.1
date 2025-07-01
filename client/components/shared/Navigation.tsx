@@ -209,12 +209,6 @@ export default function Navigation() {
               <Menu className="h-6 w-6" />
             )}
           </button>
-
-          {/* Hotline Button */}
-          <Button className="hidden lg:flex bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
-            <Phone className="w-4 h-4 mr-2" />
-            Hotline: 1900-1234
-          </Button>
         </div>
 
         {/* Mobile Menu */}
@@ -331,12 +325,6 @@ export default function Navigation() {
                   </Button>
                 </div>
               )}
-
-              {/* Mobile Hotline Button */}
-              <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold w-full mt-4">
-                <Phone className="w-4 h-4 mr-2" />
-                Hotline: 1900-1234
-              </Button>
             </div>
           </div>
         )}
