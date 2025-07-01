@@ -1,6 +1,18 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Layout from "@/components/shared/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -15,6 +27,17 @@ import {
   Star,
   TrendingUp,
   Eye,
+  Bell,
+  Settings,
+  LogOut,
+  Menu,
+  CalendarDays,
+  Plus,
+  AlertCircle,
+  Briefcase,
+  BarChart3,
+  FileText,
+  MessageSquare,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
