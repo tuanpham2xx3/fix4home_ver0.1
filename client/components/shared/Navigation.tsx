@@ -97,7 +97,7 @@ export default function Navigation() {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`px-2 py-1 text-sm font-medium transition-colors hover:text-primary ${
                   isActive(link.path)
                     ? "text-primary border-b-2 border-primary pb-1"
                     : "text-muted-foreground"
