@@ -251,9 +251,7 @@ const App = () => {
                   path="/admin/services"
                   element={
                     <ProtectedRoute allowedRoles={["admin"]}>
-                      <React.Suspense fallback={<LoadingSpinner />}>
-                        <AdminServices />
-                      </React.Suspense>
+                      <AdminServices />
                     </ProtectedRoute>
                   }
                 />
