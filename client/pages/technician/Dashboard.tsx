@@ -43,13 +43,52 @@ import { Link } from "react-router-dom";
 
 export default function TechnicianDashboard() {
   const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: "job_alert",
+      title: "New Job Available",
+      message: "Kitchen sink repair in your area - $85",
+      time: "5 minutes ago",
+      isRead: false,
+    },
+    {
+      id: 2,
+      type: "schedule_update",
+      title: "Schedule Update",
+      message: "Job JOB-002 time changed to 2:30 PM",
+      time: "1 hour ago",
+      isRead: false,
+    },
+    {
+      id: 3,
+      type: "payment",
+      title: "Payment Received",
+      message: "Payment of $120 received for JOB-001",
+      time: "2 hours ago",
+      isRead: true,
+    },
+  ]);
 
-  const todayJobs = [
+  // Mock data - in a real app, this would come from an API
+  const dashboardStats = {
+    totalJobs: 156,
+    jobsInProgress: 3,
+    upcomingJobs: 7,
+    weeklyEarnings: 1840,
+    monthlyEarnings: 7650,
+    rating: 4.8,
+    completionRate: 94,
+  };
+
+  const recentJobs = [
     {
       id: "JOB-001",
       service: "AC Repair",
       customer: "Jane Smith",
       time: "09:00 AM",
+      date: "Today",
       address: "123 Main St, Apt 4B",
       status: "scheduled",
       payment: "$120",
@@ -60,6 +99,7 @@ export default function TechnicianDashboard() {
       service: "Plumbing Fix",
       customer: "Bob Johnson",
       time: "02:00 PM",
+      date: "Today",
       address: "456 Oak Ave",
       status: "in-progress",
       payment: "$85",
@@ -70,12 +110,44 @@ export default function TechnicianDashboard() {
       service: "Electrical Inspection",
       customer: "Alice Wilson",
       time: "04:30 PM",
+      date: "Today",
       address: "789 Pine Road",
       status: "scheduled",
       payment: "$95",
       priority: "low",
     },
+    {
+      id: "JOB-004",
+      service: "Appliance Repair",
+      customer: "Mike Davis",
+      time: "10:00 AM",
+      date: "Tomorrow",
+      address: "321 Elm Street",
+      status: "scheduled",
+      payment: "$110",
+      priority: "medium",
+    },
+    {
+      id: "JOB-005",
+      service: "HVAC Maintenance",
+      customer: "Sarah Johnson",
+      time: "03:00 PM",
+      date: "Tomorrow",
+      address: "654 Maple Ave",
+      status: "scheduled",
+      payment: "$150",
+      priority: "low",
+    },
   ];
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
