@@ -26,10 +26,15 @@ import { Separator } from "@/components/ui/separator";
 export default function UserMenu() {
   const { user, userRole, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
   if (!user || !userRole) {
     return null;
   }
+
+  const isActiveRoute = (href: string) => {
+    return location.pathname === href;
+  };
 
   const getRoleIcon = (role: string) => {
     switch (role) {
