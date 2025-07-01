@@ -82,6 +82,11 @@ export default function ConfirmBooking() {
       setIsLoading(true);
       try {
         // Get booking data from localStorage
+        if (typeof window === "undefined") {
+          setError("Booking data not available. Please start over.");
+          return;
+        }
+
         const storedData = localStorage.getItem("bookingData");
         if (!storedData) {
           setError("No booking data found. Please start over.");
@@ -151,7 +156,9 @@ export default function ConfirmBooking() {
       setBookingId(newBookingId);
 
       // Clear booking data from localStorage
-      localStorage.removeItem("bookingData");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("bookingData");
+      }
 
       setBookingComplete(true);
       setShowConfirmDialog(false);
