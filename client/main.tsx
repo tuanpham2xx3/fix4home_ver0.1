@@ -186,6 +186,22 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/technician/statistics"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianStatistics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/technician/reviews"
+              element={
+                <ProtectedRoute allowedRoles={["technician"]}>
+                  <TechnicianReviews />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Admin Protected Routes */}
             <Route
